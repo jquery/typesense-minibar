@@ -1,0 +1,60 @@
+html {
+  background: #f4f4f4;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Lato, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+html, body {
+  margin: 0;
+}
+
+a {
+  color: #9c3493;
+  text-decoration: none;
+}
+
+a:active,
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+header,
+.demo-stylecontrol {
+  padding: 1rem calc((100% - 65rem) / 2) 0;
+}
+
+.demo-logo {
+  display: flex;
+  font-size: 1.333rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-decoration: none;
+
+  height: 2.3rem;
+  width: 9.2rem;
+
+  background: url(../assets/logo-text.svg) left center no-repeat;
+  background-size: contain;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+
+.demo-logo img {
+  width: auto;
+}
+
+/* Layout: Push demo-stylecontrol to the bottom. */
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+}
+main {
+  flex-grow: 1;
+}
+
+.demo-stylecontrol fieldset {
+  background: #fff;
+}

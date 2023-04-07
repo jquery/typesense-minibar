@@ -1,0 +1,23 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    # Includes 'firefox', 'chromium', and more.
+    # https://github.com/actions/runner-images/blob/ubuntu22/20230402.1/images/linux/Ubuntu2204-Readme.md
+    runs-on: ubuntu-22.04
+    env:
+      FORCE_COLOR: "1"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - uses: actions/setup-node@v3.5.0
+        with:
+          node-version: 18.x
+      - run: npm install
+      - run: npm test

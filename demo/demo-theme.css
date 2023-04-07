@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+header {
+  background: #390f39;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  gap: 0.6665rem;
+}
+
+header > * {
+  align-self: center;
+}
+
+.demo-logo {
+  background-image: url(../assets/logo-text-dark.svg);
+}
+
+.tsmb-form {
+  --tsmb-color-base-background: #691c69;
+  --tsmb-color-base30: var(--tsmb-color-primary90);
+  --tsmb-color-base50: #c090c0;
+  --tsmb-color-base90: #c090c0;
+}
+
+.tsmb-form:not(:focus-within)::before {
+  filter: invert();
+}
+
+.tsmb-form input[type=search] {
+  border: none;
+}

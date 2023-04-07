@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "extends": "semistandard",
+  "env": {
+    "es2017": true,
+    "browser": true
+  },
+  "rules": {
+    "comma-dangle": "off"
+  },
+  "globals": {
+    "TypesenseMinibar": "readonly"
+  }
+}

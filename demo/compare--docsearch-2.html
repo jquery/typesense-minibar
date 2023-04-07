@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparison: DocSearch.js v2 (typesense-docsearch 1.0.0)</title>
+<link rel="stylesheet" href="demo.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@1.0.0/dist/cdn/docsearch.css">
+<body>
+	<header>
+		<input type="search" id="searchbar">
+	</header>
+
+
+	<form class="demo-stylecontrol">
+		<p>Compare to:
+			<a href="./index.html">typesense-minibar</a>
+			&bull; <a href="./compare--docsearch-3.html">DocSearch.js v3</a>
+		</p>
+	</form>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@1.0.0/dist/cdn/docsearch.js"></script>
+	<script>
+	docsearch({
+		inputSelector: '#searchbar',
+		typesenseCollectionName: 'qunitjs_com',
+		typesenseServerConfig: {
+			nodes: [{
+				host: 'typesense.jquery.com',
+				port: '443',
+				protocol: 'https'
+			}],
+			apiKey: 'Zh8mMgohXECel9wjPwqT7lekLSG3OCgz',
+		}
+	});
+	</script>
+</body>
