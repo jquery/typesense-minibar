@@ -11,19 +11,14 @@ globalThis.TypesenseMinibar = class TypesenseMinibar {
     this.listbox = document.createElement('div');
     this.preconnect = null;
     this.cache = new Map();
-    this.state = {
-      query: '',
-      hits: [],
-      cursor: -1,
-      open: false,
-    };
+    this.state = { query: '', hits: [], cursor: -1, open: false };
     this.onDocClick = this.onDocClick.bind(this);
     this.onDocSlash = this.onDocSlash.bind(this);
 
     this.listbox.setAttribute('role', 'listbox');
     this.listbox.hidden = true;
     this.input.after(this.listbox);
-    this.input.addEventListener('click', () => {
+    this.input.addEventListener('focus', () => {
       if (!this.preconnect) {
         this.preconnect = document.createElement('link');
         this.preconnect.rel = 'preconnect';
@@ -31,6 +26,12 @@ globalThis.TypesenseMinibar = class TypesenseMinibar {
         this.preconnect.href = this.origin;
         document.head.append(this.preconnect);
       }
+      if (!this.state.open && this.state.hits.length) {
+        this.state.open = true;
+        this.render();
+      }
+    });
+    this.input.addEventListener('click', () => {
       if (!this.state.open && this.state.hits.length) {
         this.state.open = true;
         this.render();
@@ -128,7 +129,7 @@ globalThis.TypesenseMinibar = class TypesenseMinibar {
       }
     );
     const data = await resp.json();
-    // flatten hit objects for HTML template
+    // flatten hits for HTML template
     const hits = data?.grouped_hits?.map(ghit => {
       const hit = ghit.hits[0];
       return {

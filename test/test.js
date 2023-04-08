@@ -149,13 +149,6 @@ QUnit.module('typesense-minibar', hooks => {
     }, TypeError);
   });
 
-  QUnit.test('TypesenseMinibar constructor [no initial preconnect]', async assert => {
-    const form = parseHTML('<form><input type="search"></form>');
-    bar = new TypesenseMinibar(form);
-
-    assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 0, 'initial preconnect');
-  });
-
   QUnit.test.each('TypesenseMinibar input', {
     'no results': {
       value: 'something',
@@ -344,5 +337,17 @@ QUnit.module('typesense-minibar', hooks => {
     assert.strictEqual(document.activeElement, input, 'focus after slash');
   });
 
-  // TODO: Preconnect on focus
+  QUnit.test('TypesenseMinibar focus [preconnect]', async assert => {
+    const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    document.body.append(form);
+    bar = new TypesenseMinibar(form);
+
+    assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 0, 'initial preconnect');
+
+    simulate(document, 'keydown', { key: '/' });
+    assert.strictEqual(document.activeElement, input, 'focus after slash');
+    await new Promise(resolve => setTimeout(resolve));
+    assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 1, 'preconnect link');
+  });
 });
