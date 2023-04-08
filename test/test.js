@@ -117,9 +117,11 @@ QUnit.module('typesense-minibar', hooks => {
     mockFetchResponse = null;
   });
 
-  let nextRender, renderDone;
-  function resetNextRender () {
-    nextRender = new Promise(resolve => { renderDone = resolve; });
+  let renderDone;
+  async function expectRender (cb) {
+    const promise = new Promise(resolve => { renderDone = resolve; });
+    cb();
+    return await promise;
   }
   hooks.before(() => {
     const renderSuper = TypesenseMinibar.prototype.render;
@@ -127,9 +129,6 @@ QUnit.module('typesense-minibar', hooks => {
       renderSuper.call(this);
       renderDone();
     };
-  });
-  hooks.beforeEach(() => {
-    resetNextRender();
   });
 
   let bar;
@@ -195,8 +194,9 @@ QUnit.module('typesense-minibar', hooks => {
 
     mockFetchResponse = resp;
     input.value = value;
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
 
     assert.equal(normalizeHTML(bar.listbox.innerHTML), normalizeHTML(expect), 'listbox HTML');
   });
@@ -208,23 +208,24 @@ QUnit.module('typesense-minibar', hooks => {
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOME;
     input.value = 'some';
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 1');
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    resetNextRender();
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some › Thing', 'result 2');
 
     // expect cache hit, no fetch
     mockFetchResponse = null;
     input.value = 'some';
-    resetNextRender();
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 3');
   });
 
@@ -235,8 +236,9 @@ QUnit.module('typesense-minibar', hooks => {
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.false(bar.listbox.hidden, 'listbox not hidden');
 
     mockFetchResponse = null; // expect no fetch request for empty query
@@ -253,8 +255,9 @@ QUnit.module('typesense-minibar', hooks => {
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.false(bar.listbox.hidden, 'listbox not hidden');
     assert.equal(bar.listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
 
@@ -271,8 +274,9 @@ QUnit.module('typesense-minibar', hooks => {
 
     mockFetchResponse = API_RESP_MULTIPLE;
     input.value = 'tv';
-    simulate(input, 'input');
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'input');
+    });
     assert.false(bar.listbox.hidden, 'listbox not hidden');
     assert.equal(
       normalizeHTML(bar.listbox.outerHTML),
@@ -284,9 +288,9 @@ QUnit.module('typesense-minibar', hooks => {
       'initial result'
     );
 
-    resetNextRender();
-    simulate(input, 'keydown', { code: 'ArrowDown' }); // -1 to 0
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'keydown', { code: 'ArrowDown' }); // -1 to 0
+    });
     assert.equal(
       normalizeHTML(bar.listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
@@ -299,9 +303,9 @@ QUnit.module('typesense-minibar', hooks => {
 
     simulate(input, 'keydown', { code: 'ArrowDown' }); // 0 to 1
     simulate(input, 'keydown', { code: 'ArrowDown' }); // 1 to 2
-    resetNextRender();
-    simulate(input, 'keydown', { code: 'ArrowDown' }); // 2 to -1
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'keydown', { code: 'ArrowDown' }); // 2 to -1
+    });
     assert.equal(
       normalizeHTML(bar.listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
@@ -313,9 +317,9 @@ QUnit.module('typesense-minibar', hooks => {
     );
 
     simulate(input, 'keydown', { code: 'ArrowUp' }); // -1 to 2 (wrap around)
-    resetNextRender();
-    simulate(input, 'keydown', { code: 'ArrowUp' }); // 2 to 1
-    await nextRender;
+    await expectRender(() => {
+      simulate(input, 'keydown', { code: 'ArrowUp' }); // 2 to 1
+    });
     assert.equal(
       normalizeHTML(bar.listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
