@@ -21,6 +21,7 @@ a:focus {
 }
 
 header,
+main,
 .demo-stylecontrol {
   padding: 1rem calc((100% - 65rem) / 2) 0;
 }
