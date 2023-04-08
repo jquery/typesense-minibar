@@ -3,12 +3,12 @@
 <div align="center">
 
 [![Continuous integration](https://github.com/Krinkle/typesense-minibar/actions/workflows/CI.yaml/badge.svg)](https://github.com/Krinkle/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
-[![Test coverage](https://img.shields.io/badge/coverage-88%25-brightgreen.svg)](https://github.com/Krinkle/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
+[![Test coverage](https://img.shields.io/badge/coverage-88%25-brightgreen.svg)](https://krinkle.github.io/typesense-minibar/coverage/)
 [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 </div>
 
-**minibar** is a fast 2kB autocomplete search bar. It is an alternative to typesense-js (), typesense-docsearch.js, Algolia DocSearch.js, Autocomplete, and Instantsearch.
+**minibar** is a fast 2kB autocomplete search bar. It is an alternative to typesense-docsearch.js, Algolia DocSearch, InstantSearch, autocomplete-js, and typesense-js.
 
 ## Features
 
@@ -21,6 +21,8 @@
 * **Easy to install**, fully declarative via HTML (no-code setup!)
 
 ## Getting started
+
+**[Demo](https://krinkle.github.io/typesense-minibar/demo/)**
 
 ```html
 <form role="search" class="tsmb-form"
@@ -78,3 +80,7 @@ Notes:
 * [Google Chrome requires Android 7.0 and macOS 10.13](https://support.google.com/chrome/a/answer/7100626?hl=en)
 * [Firefox 48 last to support OS X 10.6-10.8](https://www.mozilla.org/en-US/firefox/48.0/releasenotes/)
 * [Firefox 78 last to support OS X 10.9-10.11](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/)
+
+## Feedback
+
+For questions, bug reports, or feature requests, use the [Issue tracker](https://github.com/Krinkle/typesense-minibar/issues).
