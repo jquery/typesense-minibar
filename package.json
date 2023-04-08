@@ -1,0 +1,55 @@
+{
+  "name": "typesense-minibar",
+  "description": "Fast 2kB autocomplete search bar",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Krinkle/typesense-minibar/",
+  "keywords": [
+    "autocomplete",
+    "typesense",
+    "docsearch",
+    "algolia",
+    "fast",
+    "dependency-free",
+    "typeahead",
+    "instantsearch",
+    "melisearch",
+    "search"
+  ],
+  "bugs": {
+    "url": "https://github.com/Krinkle/typesense-minibar/issues"
+  },
+  "license": "MIT",
+  "main": "typesense-minibar.js",
+  "devDependencies": {
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-qunit": "^4.1.2",
+    "qunit": "^2.19.4",
+    "semistandard": "^16.0.1"
+  },
+  "scripts": {
+    "lint": "eslint --cache .",
+    "lint-fix": "eslint --cache --fix .",
+    "test": "npm run test-browser && npm run lint",
+    "test-browser": "karma start",
+    "test-browser-watch": "karma start --auto-watch --no-single-run",
+    "size": "cat typesense-minibar.js | gzip -9 - | wc -c",
+    "serve-demo": "python3 -m http.server 4100"
+  },
+  "eslintIgnore": [
+    "/coverage",
+    "/node_modules"
+  ],
+  "nyc": {
+    "include": [
+      "*.js"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "report-dir": "coverage"
+  }
+}
