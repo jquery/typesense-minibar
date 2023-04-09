@@ -23,6 +23,11 @@
     "url": "https://github.com/jquery/typesense-minibar/issues"
   },
   "license": "MIT",
+  "files": [
+    "typesense-minibar.js",
+    "typesense-minibar.css",
+    "LICENSE.txt"
+  ],
   "main": "typesense-minibar.js",
   "devDependencies": {
     "karma": "^6.4.1",
