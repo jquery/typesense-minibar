@@ -57,7 +57,7 @@ The below matrix describes support for the _enhanced_ JavaScript experience. The
 | Safari | Last three years | Safari 13.1 (2020)
 | iOS | Last three years | iOS 13.4 (2020)
 
-<sup>Technical feature requirements: ES6 Classes, ES2020 Optional chaining, ES2022 Async functions, DOM NodeList-forEach.</sup>
+<sup>Technical feature requirements: ES6 syntax, ES2020 Optional chaining, ES2022 Async functions, DOM NodeList-forEach.</sup>
 
 Practical implications:
 

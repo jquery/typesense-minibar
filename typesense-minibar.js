@@ -1,8 +1,6 @@
 /*! typesense-minibar 1.0.0 | Copyright Timo Tijhof <https://timotijhof.net> | License: MIT */
 globalThis.tsminibar = function tsminibar (form, options) {
-  const origin = form.dataset.origin;
-  const key = form.dataset.key;
-  const collection = form.dataset.collection;
+  const { origin, key, collection } = form.dataset;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
 
@@ -68,12 +66,25 @@ globalThis.tsminibar = function tsminibar (form, options) {
   form.querySelector('.tsmb-icon-close').addEventListener('click', close);
   connect();
 
+  function close () {
+    if (state.open) {
+      state.open = false;
+      state.cursor = -1;
+      render();
+    }
+  }
+
   function connect () {
     document.addEventListener('click', onDocClick);
     if (!options || options.slash !== false) {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
     }
+  }
+
+  function disconnect () {
+    document.removeEventListener('click', onDocClick);
+    document.removeEventListener('keydown', onDocSlash);
   }
 
   function onDocClick (e) {
@@ -85,11 +96,6 @@ globalThis.tsminibar = function tsminibar (form, options) {
       input.focus();
       e.preventDefault();
     }
-  }
-
-  function disconnect () {
-    document.removeEventListener('click', onDocClick);
-    document.removeEventListener('keydown', onDocSlash);
   }
 
   async function search (query) {
@@ -115,11 +121,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
         highlight_affix_num_tokens: '12',
         'x-typesense-api-key': key,
       }),
-      {
-        mode: 'cors',
-        credentials: 'omit',
-        method: 'GET',
-      }
+      { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
     // flatten hits for render()
@@ -163,15 +165,6 @@ globalThis.tsminibar = function tsminibar (form, options) {
     render();
   }
 
-  function close () {
-    if (state.open) {
-      state.open = false;
-      state.cursor = -1;
-      render();
-    }
-  }
-
   return { form, connect, disconnect };
 };
-
 document.querySelectorAll('.tsmb-form[data-origin]').forEach(form => tsminibar(form));
