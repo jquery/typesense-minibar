@@ -117,19 +117,18 @@ QUnit.module('typesense-minibar', hooks => {
     mockFetchResponse = null;
   });
 
-  let renderDone;
-  async function expectRender (cb) {
+  async function expectRender (targetElement, cb) {
+    let renderDone;
     const promise = new Promise(resolve => { renderDone = resolve; });
+    const observer = new MutationObserver(() => {
+      renderDone();
+    });
+    observer.observe(targetElement, { attributes: true, childList: true, subtree: true });
     cb();
+    await new Promise(resolve => setTimeout(resolve));
+    observer.disconnect();
     return await promise;
   }
-  hooks.before(() => {
-    const renderSuper = TypesenseMinibar.prototype.render;
-    TypesenseMinibar.prototype.render = function () {
-      renderSuper.call(this);
-      renderDone();
-    };
-  });
 
   let bar;
   hooks.afterEach(() => {
@@ -141,15 +140,15 @@ QUnit.module('typesense-minibar', hooks => {
     document.head.querySelectorAll('link[rel=preconnect]').forEach(link => link.remove());
   });
 
-  QUnit.test('TypesenseMinibar constructor [fail without input element]', assert => {
+  QUnit.test('init [fail without input element]', assert => {
     const form = parseHTML('<form>');
 
     assert.throws(() => {
-      bar = new TypesenseMinibar(form);
+      bar = tsminibar(form);
     }, TypeError);
   });
 
-  QUnit.test.each('TypesenseMinibar input', {
+  QUnit.test.each('input', {
     'no results': {
       value: 'something',
       resp: API_RESP_EMPTY,
@@ -183,96 +182,101 @@ QUnit.module('typesense-minibar', hooks => {
   }, async (assert, { value, resp, expect }) => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
-    const bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
 
     mockFetchResponse = resp;
     input.value = value;
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
 
-    assert.equal(normalizeHTML(bar.listbox.innerHTML), normalizeHTML(expect), 'listbox HTML');
+    assert.equal(normalizeHTML(listbox.innerHTML), normalizeHTML(expect), 'listbox HTML');
   });
 
-  QUnit.test('TypesenseMinibar input [memory cache hit]', async assert => {
+  QUnit.test('input [memory cache hit]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
-    const bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOME;
     input.value = 'some';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 1');
+    assert.equal(listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 1');
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some › Thing', 'result 2');
+    assert.equal(listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some › Thing', 'result 2');
 
     // expect cache hit, no fetch
     mockFetchResponse = null;
     input.value = 'some';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.equal(bar.listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 3');
+    assert.equal(listbox.querySelector('.tsmb-suggestion_title').textContent, 'Some', 'result 3');
   });
 
-  QUnit.test('TypesenseMinibar listbox [close on empty string or backspace]', async assert => {
+  QUnit.test('listbox [close on empty string or backspace]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
-    const bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.false(bar.listbox.hidden, 'listbox not hidden');
+    assert.false(listbox.hidden, 'listbox not hidden');
 
     mockFetchResponse = null; // expect no fetch request for empty query
     input.value = '';
     simulate(input, 'input');
 
-    assert.true(bar.listbox.hidden, 'listbox hidden');
+    assert.true(listbox.hidden, 'listbox hidden');
   });
 
-  QUnit.test('TypesenseMinibar listbox [close on Esc]', async assert => {
+  QUnit.test('listbox [close on Esc]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
-    const bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
 
     mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
     input.value = 'something';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.false(bar.listbox.hidden, 'listbox not hidden');
-    assert.equal(bar.listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
+    assert.false(listbox.hidden, 'listbox not hidden');
+    assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
 
     mockFetchResponse = null;
     simulate(input, 'keydown', { code: 'Escape' });
 
-    assert.true(bar.listbox.hidden, 'listbox hidden');
+    assert.true(listbox.hidden, 'listbox hidden');
   });
 
-  QUnit.test('TypesenseMinibar listbox [arrow key cursor]', async assert => {
+  QUnit.test('listbox [arrow key cursor]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
-    const bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
 
     mockFetchResponse = API_RESP_MULTIPLE;
     input.value = 'tv';
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'input');
     });
-    assert.false(bar.listbox.hidden, 'listbox not hidden');
+    assert.false(listbox.hidden, 'listbox not hidden');
     assert.equal(
-      normalizeHTML(bar.listbox.outerHTML),
+      normalizeHTML(listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
         <div role="option"><a href="https://example.test/a" tabindex="-1"><div class="tsmb-suggestion_title">Person</div><div class="tsmb-suggestion_content"></div></a></div>
         <div role="option"><a href="https://example.test/b" tabindex="-1"><div class="tsmb-suggestion_title">Woman</div><div class="tsmb-suggestion_content"></div></a></div>
@@ -281,11 +285,11 @@ QUnit.module('typesense-minibar', hooks => {
       'initial result'
     );
 
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'keydown', { code: 'ArrowDown' }); // -1 to 0
     });
     assert.equal(
-      normalizeHTML(bar.listbox.outerHTML),
+      normalizeHTML(listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
         <div role="option" aria-selected="true"><a href="https://example.test/a" tabindex="-1"><div class="tsmb-suggestion_title">Person</div><div class="tsmb-suggestion_content"></div></a></div>
         <div role="option"><a href="https://example.test/b" tabindex="-1"><div class="tsmb-suggestion_title">Woman</div><div class="tsmb-suggestion_content"></div></a></div>
@@ -296,11 +300,11 @@ QUnit.module('typesense-minibar', hooks => {
 
     simulate(input, 'keydown', { code: 'ArrowDown' }); // 0 to 1
     simulate(input, 'keydown', { code: 'ArrowDown' }); // 1 to 2
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'keydown', { code: 'ArrowDown' }); // 2 to -1
     });
     assert.equal(
-      normalizeHTML(bar.listbox.outerHTML),
+      normalizeHTML(listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
         <div role="option"><a href="https://example.test/a" tabindex="-1"><div class="tsmb-suggestion_title">Person</div><div class="tsmb-suggestion_content"></div></a></div>
         <div role="option"><a href="https://example.test/b" tabindex="-1"><div class="tsmb-suggestion_title">Woman</div><div class="tsmb-suggestion_content"></div></a></div>
@@ -310,11 +314,11 @@ QUnit.module('typesense-minibar', hooks => {
     );
 
     simulate(input, 'keydown', { code: 'ArrowUp' }); // -1 to 2 (wrap around)
-    await expectRender(() => {
+    await expectRender(form, () => {
       simulate(input, 'keydown', { code: 'ArrowUp' }); // 2 to 1
     });
     assert.equal(
-      normalizeHTML(bar.listbox.outerHTML),
+      normalizeHTML(listbox.outerHTML),
       normalizeHTML(`<div role="listbox">
         <div role="option"><a href="https://example.test/a" tabindex="-1"><div class="tsmb-suggestion_title">Person</div><div class="tsmb-suggestion_content"></div></a></div>
         <div role="option" aria-selected="true"><a href="https://example.test/b" tabindex="-1"><div class="tsmb-suggestion_title">Woman</div><div class="tsmb-suggestion_content"></div></a></div>
@@ -324,24 +328,24 @@ QUnit.module('typesense-minibar', hooks => {
     );
   });
 
-  QUnit.test('TypesenseMinibar focus [slash]', async assert => {
+  QUnit.test('focus [slash]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
     document.body.append(form);
     assert.true(!document.activeElement || !form.contains(document.activeElement), 'initial focus');
 
-    bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
     assert.true(!document.activeElement || !form.contains(document.activeElement), 'focus after contruct');
 
     simulate(document, 'keydown', { key: '/' });
     assert.strictEqual(document.activeElement, input, 'focus after slash');
   });
 
-  QUnit.test('TypesenseMinibar focus [preconnect]', async assert => {
+  QUnit.test('focus [preconnect]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
     document.body.append(form);
-    bar = new TypesenseMinibar(form);
+    bar = tsminibar(form);
 
     assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 0, 'initial preconnect');
 
