@@ -2,7 +2,11 @@
   "name": "typesense-minibar",
   "description": "Fast 2kB autocomplete search bar",
   "version": "0.0.1",
-  "homepage": "https://github.com/Krinkle/typesense-minibar/",
+  "homepage": "https://github.com/jquery/typesense-minibar/",
+  "author": {
+    "name": "Timo Tijhof",
+    "url": "https://timotijhof.net"
+  },
   "keywords": [
     "autocomplete",
     "typesense",
@@ -16,7 +20,7 @@
     "search"
   ],
   "bugs": {
-    "url": "https://github.com/Krinkle/typesense-minibar/issues"
+    "url": "https://github.com/jquery/typesense-minibar/issues"
   },
   "license": "MIT",
   "main": "typesense-minibar.js",

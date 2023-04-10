@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Continuous integration](https://github.com/Krinkle/typesense-minibar/actions/workflows/CI.yaml/badge.svg)](https://github.com/Krinkle/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
-[![Test coverage](https://img.shields.io/badge/coverage-89%25-brightgreen.svg)](https://krinkle.github.io/typesense-minibar/coverage/)
+[![Continuous integration](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml/badge.svg)](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
+[![Test coverage](https://img.shields.io/badge/coverage-89%25-brightgreen.svg)](https://jquery.github.io/typesense-minibar/coverage/)
 [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 </div>
@@ -22,7 +22,7 @@
 
 ## Getting started
 
-**[Demo](https://krinkle.github.io/typesense-minibar/demo/)**
+**[Demo](https://jquery.github.io/typesense-minibar/demo/)**
 
 ```html
 <form role="search" class="tsmb-form"
@@ -85,4 +85,4 @@ Notes:
 
 ## Feedback
 
-For questions, bug reports, or feature requests, use the [Issue tracker](https://github.com/Krinkle/typesense-minibar/issues).
+For questions, bug reports, or feature requests, use the [Issue tracker](https://github.com/jquery/typesense-minibar/issues).
