@@ -1,114 +1,109 @@
 /*! typesense-minibar 1.0.0 | Copyright Timo Tijhof <https://timotijhof.net> | License: MIT */
-globalThis.TypesenseMinibar = class TypesenseMinibar {
-  constructor (form, options) {
-    this.origin = form.dataset.origin;
-    this.key = form.dataset.key;
-    this.collection = form.dataset.collection;
-    this.options = options || {};
+globalThis.tsminibar = function tsminibar (form, options) {
+  options = options || {};
+  const origin = form.dataset.origin;
+  const key = form.dataset.key;
+  const collection = form.dataset.collection;
+  const cache = new Map();
+  const state = { query: '', hits: [], cursor: -1, open: false };
+  const input = form.querySelector('input[type=search]');
+  const listbox = document.createElement('div');
 
-    this.form = form;
-    this.input = form.querySelector('input[type=search]');
-    this.listbox = document.createElement('div');
-    this.preconnect = null;
-    this.cache = new Map();
-    this.state = { query: '', hits: [], cursor: -1, open: false };
-    this.onDocClick = this.onDocClick.bind(this);
-    this.onDocSlash = this.onDocSlash.bind(this);
+  listbox.setAttribute('role', 'listbox');
+  listbox.hidden = true;
+  input.after(listbox);
 
-    this.listbox.setAttribute('role', 'listbox');
-    this.listbox.hidden = true;
-    this.input.after(this.listbox);
-    this.input.addEventListener('focus', () => {
-      if (!this.preconnect) {
-        this.preconnect = document.createElement('link');
-        this.preconnect.rel = 'preconnect';
-        this.preconnect.crossOrigin = 'anonymous'; // for fetch(mode:cors,credentials:omit)
-        this.preconnect.href = this.origin;
-        document.head.append(this.preconnect);
-      }
-      if (!this.state.open && this.state.hits.length) {
-        this.state.open = true;
-        this.render();
-      }
-    });
-    this.input.addEventListener('click', () => {
-      if (!this.state.open && this.state.hits.length) {
-        this.state.open = true;
-        this.render();
-      }
-    });
-    this.input.addEventListener('input', async () => {
-      const query = this.state.query = this.input.value;
-      if (!query) {
-        this.state.hits = []; // avoid non-current hits on focus
-        this.state.cursor = -1;
-        this.close();
-        return;
-      }
-      const hits = await this.search(query);
-      if (this.state.query === query) { // ignore response to non-current query
-        this.state.hits = hits;
-        this.state.cursor = -1;
-        this.state.open = true;
-        this.render();
-      }
-    });
-    this.input.addEventListener('keydown', e => {
-      if (!(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)) {
-        if (e.code === 'ArrowDown') this.moveCursor(1);
-        if (e.code === 'ArrowUp') this.moveCursor(-1);
-        if (e.code === 'Escape') this.close();
-        if (e.code === 'Enter') {
-          const url = this.state.hits[this.state.cursor]?.url;
-          if (url) {
-            location.href = url;
-          }
+  let preconnect = null;
+  input.addEventListener('focus', () => {
+    if (!preconnect) {
+      preconnect = document.createElement('link');
+      preconnect.rel = 'preconnect';
+      preconnect.crossOrigin = 'anonymous'; // for fetch(mode:cors,credentials:omit)
+      preconnect.href = origin;
+      document.head.append(preconnect);
+    }
+    if (!state.open && state.hits.length) {
+      state.open = true;
+      render();
+    }
+  });
+  input.addEventListener('click', () => {
+    if (!state.open && state.hits.length) {
+      state.open = true;
+      render();
+    }
+  });
+  input.addEventListener('input', async () => {
+    const query = state.query = input.value;
+    if (!query) {
+      state.hits = []; // avoid non-current hits on focus
+      state.cursor = -1;
+      close();
+      return;
+    }
+    const hits = await search(query);
+    if (state.query === query) { // ignore response to non-current query
+      state.hits = hits;
+      state.cursor = -1;
+      state.open = true;
+      render();
+    }
+  });
+  input.addEventListener('keydown', e => {
+    if (!(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)) {
+      if (e.code === 'ArrowDown') moveCursor(1);
+      if (e.code === 'ArrowUp') moveCursor(-1);
+      if (e.code === 'Escape') close();
+      if (e.code === 'Enter') {
+        const url = state.hits[state.cursor]?.url;
+        if (url) {
+          location.href = url;
         }
       }
-    });
-    this.form.addEventListener('submit', e => {
-      e.preventDefault(); // disable fallback
-    });
-    this.form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
-    this.form.querySelector('.tsmb-icon-close').addEventListener('click', this.close.bind(this));
-    this.connect();
+    }
+  });
+  form.addEventListener('submit', e => {
+    e.preventDefault(); // disable fallback
+  });
+  form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
+  form.querySelector('.tsmb-icon-close').addEventListener('click', close);
+  connect();
+
+  function connect () {
+    document.addEventListener('click', onDocClick);
+    if (options.slash !== false) {
+      document.addEventListener('keydown', onDocSlash);
+      form.classList.add('tsmb-form--slash');
+    }
   }
 
-  onDocClick (e) {
-    if (!this.form.contains(e.target)) this.close();
+  function onDocClick (e) {
+    if (!form.contains(e.target)) close();
   }
 
-  onDocSlash (e) {
+  function onDocSlash (e) {
     if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName)) {
-      this.input.focus();
+      input.focus();
       e.preventDefault();
     }
   }
 
-  connect () {
-    document.addEventListener('click', this.onDocClick);
-    if (this.options.slash !== false) {
-      document.addEventListener('keydown', this.onDocSlash);
-      this.form.classList.add('tsmb-form--slash');
-    }
+  function disconnect () {
+    document.removeEventListener('click', onDocClick);
+    document.removeEventListener('keydown', onDocSlash);
   }
 
-  disconnect () {
-    document.removeEventListener('click', this.onDocClick);
-    document.removeEventListener('keydown', this.onDocSlash);
-  }
-
-  async search (query) {
-    const cached = this.cache.get(query);
+  async function search (query) {
+    const cached = cache.get(query);
     if (cached) {
-      this.cache.delete(query);
-      this.cache.set(query, cached); // track LRU
+      cache.delete(query);
+      cache.set(query, cached); // track LRU
       return cached;
     }
 
     // https://typesense.org/docs/0.24.1/api/search.html
     const resp = await fetch(
-      `${this.origin}/collections/${this.collection}/documents/search?` + new URLSearchParams({
+      `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
         q: query,
         per_page: '5',
         // based on https://github.com/typesense/typesense-docsearch.js/blob/3.4.0/packages/docsearch-react/src/DocSearchModal.tsx
@@ -120,7 +115,7 @@ globalThis.TypesenseMinibar = class TypesenseMinibar {
         sort_by: 'item_priority:desc',
         snippet_threshold: '8',
         highlight_affix_num_tokens: '12',
-        'x-typesense-api-key': this.key,
+        'x-typesense-api-key': key,
       }),
       {
         mode: 'cors',
@@ -139,43 +134,45 @@ globalThis.TypesenseMinibar = class TypesenseMinibar {
       };
     }) || [];
 
-    this.cache.set(query, hits);
-    if (this.cache.size > 100) {
-      this.cache.delete(this.cache.keys().next().value);
+    cache.set(query, hits);
+    if (cache.size > 100) {
+      cache.delete(cache.keys().next().value);
     }
     return hits;
   }
 
-  escapeText (s) {
+  function escapeText (s) {
     return s.replace(/['"<>&]/g, c => ({ "'": '&#039;', '"': '&quot;', '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
   }
 
-  render () {
-    this.listbox.hidden = !this.state.open;
-    this.form.classList.toggle('tsmb-form--open', this.state.open);
-    if (this.state.open) {
-      this.listbox.innerHTML = this.state.hits.map((hit, i) => `<div role="option"${i === this.state.cursor ? ' aria-selected="true"' : ''}><a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.titleHtml}</div><div class="tsmb-suggestion_content">${hit.contentHtml}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${this.escapeText(this.state.query)}'.</div>`;
+  function render () {
+    listbox.hidden = !state.open;
+    form.classList.toggle('tsmb-form--open', state.open);
+    if (state.open) {
+      listbox.innerHTML = state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}><a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.titleHtml}</div><div class="tsmb-suggestion_content">${hit.contentHtml}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escapeText(state.query)}'.</div>`;
     }
   }
 
-  moveCursor (offset) {
-    this.state.cursor += offset;
+  function moveCursor (offset) {
+    state.cursor += offset;
     // -1 refers to input field
-    if (this.state.cursor >= this.state.hits.length) {
-      this.state.cursor = -1;
-    } else if (this.state.cursor < -1) {
-      this.state.cursor = this.state.hits.length - 1;
+    if (state.cursor >= state.hits.length) {
+      state.cursor = -1;
+    } else if (state.cursor < -1) {
+      state.cursor = state.hits.length - 1;
     }
-    this.render();
+    render();
   }
 
-  close () {
-    if (this.state.open) {
-      this.state.open = false;
-      this.state.cursor = -1;
-      this.render();
+  function close () {
+    if (state.open) {
+      state.open = false;
+      state.cursor = -1;
+      render();
     }
   }
+
+  return { form, connect, disconnect };
 };
 
-document.querySelectorAll('.tsmb-form[data-origin]').forEach(form => new TypesenseMinibar(form));
+document.querySelectorAll('.tsmb-form[data-origin]').forEach(form => tsminibar(form));

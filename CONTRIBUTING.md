@@ -7,14 +7,14 @@
 ## API
 
 ```js
-new TypesenseMinibar(document.querySelector('#myform'))`
+tsminibar(document.querySelector('#myform'))`
 ```
 
-Class parameters:
+Function parameters:
 
 * `{HTMLElement} form`: The element must have `data-origin`, `data-collection`, and `data-key`, attributes; and contain a descendent of `<input type="search">`.
-* `{Object} [options]`: Optional options:
-  * `{boolean} [options.slash=true]`: Focus the input field if the `/` slash key is pressed outside any input or textarea element. When enabled, a `keydown` event listener is added to `document`.
+* `{Object} [options]`: (Optional)
+  * `{boolean} [options.slash=true]`: Focus the input field if the `/` slash key is pressed outside any input or textarea element. When enabled, a `keydown` event listener is added to `document`. If multiple search forms are initiatilised on the same page, the first one bound with `slash=true` will "win".
 
 ## Development
 

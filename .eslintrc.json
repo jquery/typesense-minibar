@@ -9,6 +9,6 @@
     "comma-dangle": "off"
   },
   "globals": {
-    "TypesenseMinibar": "readonly"
+    "tsminibar": "readonly"
   }
 }

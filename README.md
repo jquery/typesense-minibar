@@ -46,6 +46,8 @@
 
 ## Browser support
 
+The below matrix describes support for the _enhanced_ JavaScript experience. The basic HTML experience, which falls back to submitting a form to DuckDuckGo, works in all known browsers (including IE 6, IE 5 for Mac, and Netscape Navigator).
+
 | Browser | Policy | Version
 |--|--|--
 | Firefox | Current and previous version,<br>Current and previous ESR | Firefox 74+ (2020)
