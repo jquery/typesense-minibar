@@ -1,14 +1,13 @@
 /*! typesense-minibar 1.0.0 | Copyright Timo Tijhof <https://timotijhof.net> | License: MIT */
 globalThis.tsminibar = function tsminibar (form, options) {
-  options = options || {};
   const origin = form.dataset.origin;
   const key = form.dataset.key;
   const collection = form.dataset.collection;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
+
   const input = form.querySelector('input[type=search]');
   const listbox = document.createElement('div');
-
   listbox.setAttribute('role', 'listbox');
   listbox.hidden = true;
   input.after(listbox);
@@ -18,7 +17,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
     if (!preconnect) {
       preconnect = document.createElement('link');
       preconnect.rel = 'preconnect';
-      preconnect.crossOrigin = 'anonymous'; // for fetch(mode:cors,credentials:omit)
+      preconnect.crossOrigin = 'anonymous'; // for fetch mode:cors,credentials:omit
       preconnect.href = origin;
       document.head.append(preconnect);
     }
@@ -49,7 +48,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
       render();
     }
   });
-  input.addEventListener('keydown', e => {
+  input.addEventListener('keydown', (e) => {
     if (!(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)) {
       if (e.code === 'ArrowDown') moveCursor(1);
       if (e.code === 'ArrowUp') moveCursor(-1);
@@ -62,7 +61,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
       }
     }
   });
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault(); // disable fallback
   });
   form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
@@ -71,7 +70,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
 
   function connect () {
     document.addEventListener('click', onDocClick);
-    if (options.slash !== false) {
+    if (!options || options.slash !== false) {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
     }
@@ -106,7 +105,6 @@ globalThis.tsminibar = function tsminibar (form, options) {
       `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
         q: query,
         per_page: '5',
-        // based on https://github.com/typesense/typesense-docsearch.js/blob/3.4.0/packages/docsearch-react/src/DocSearchModal.tsx
         query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
         include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content,url_without_anchor,url,id',
         highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
@@ -124,7 +122,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
       }
     );
     const data = await resp.json();
-    // flatten hits for HTML template
+    // flatten hits for render()
     const hits = data?.grouped_hits?.map(ghit => {
       const hit = ghit.hits[0];
       return {
@@ -158,7 +156,8 @@ globalThis.tsminibar = function tsminibar (form, options) {
     // -1 refers to input field
     if (state.cursor >= state.hits.length) {
       state.cursor = -1;
-    } else if (state.cursor < -1) {
+    }
+    if (state.cursor < -1) {
       state.cursor = state.hits.length - 1;
     }
     render();
