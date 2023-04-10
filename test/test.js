@@ -89,8 +89,8 @@ QUnit.module('typesense-minibar', hooks => {
     return div.firstChild;
   }
 
-  function simulate (element, type, props) {
-    const event = new Event(type);
+  function simulate (element, type, options, props) {
+    const event = new Event(type, options);
     Object.assign(event, props);
     element.dispatchEvent(event);
   }
@@ -258,7 +258,27 @@ QUnit.module('typesense-minibar', hooks => {
     assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
 
     mockFetchResponse = null;
-    simulate(input, 'keydown', { code: 'Escape' });
+    simulate(input, 'keydown', {}, { code: 'Escape' });
+
+    assert.true(listbox.hidden, 'listbox hidden');
+  });
+
+  QUnit.test('listbox [close on click]', async assert => {
+    const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+    assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
 
     assert.true(listbox.hidden, 'listbox hidden');
   });
@@ -286,7 +306,7 @@ QUnit.module('typesense-minibar', hooks => {
     );
 
     await expectRender(form, () => {
-      simulate(input, 'keydown', { code: 'ArrowDown' }); // -1 to 0
+      simulate(input, 'keydown', {}, { code: 'ArrowDown' }); // -1 to 0
     });
     assert.equal(
       normalizeHTML(listbox.outerHTML),
@@ -298,10 +318,10 @@ QUnit.module('typesense-minibar', hooks => {
       'select 0'
     );
 
-    simulate(input, 'keydown', { code: 'ArrowDown' }); // 0 to 1
-    simulate(input, 'keydown', { code: 'ArrowDown' }); // 1 to 2
+    simulate(input, 'keydown', {}, { code: 'ArrowDown' }); // 0 to 1
+    simulate(input, 'keydown', {}, { code: 'ArrowDown' }); // 1 to 2
     await expectRender(form, () => {
-      simulate(input, 'keydown', { code: 'ArrowDown' }); // 2 to -1
+      simulate(input, 'keydown', {}, { code: 'ArrowDown' }); // 2 to -1
     });
     assert.equal(
       normalizeHTML(listbox.outerHTML),
@@ -313,9 +333,9 @@ QUnit.module('typesense-minibar', hooks => {
       'select none'
     );
 
-    simulate(input, 'keydown', { code: 'ArrowUp' }); // -1 to 2 (wrap around)
+    simulate(input, 'keydown', {}, { code: 'ArrowUp' }); // -1 to 2 (wrap around)
     await expectRender(form, () => {
-      simulate(input, 'keydown', { code: 'ArrowUp' }); // 2 to 1
+      simulate(input, 'keydown', {}, { code: 'ArrowUp' }); // 2 to 1
     });
     assert.equal(
       normalizeHTML(listbox.outerHTML),
@@ -337,7 +357,7 @@ QUnit.module('typesense-minibar', hooks => {
     bar = tsminibar(form);
     assert.true(!document.activeElement || !form.contains(document.activeElement), 'focus after contruct');
 
-    simulate(document, 'keydown', { key: '/' });
+    simulate(document, 'keydown', {}, { key: '/' });
     assert.strictEqual(document.activeElement, input, 'focus after slash');
   });
 
@@ -349,7 +369,7 @@ QUnit.module('typesense-minibar', hooks => {
 
     assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 0, 'initial preconnect');
 
-    simulate(document, 'keydown', { key: '/' });
+    simulate(document, 'keydown', {}, { key: '/' });
     assert.strictEqual(document.activeElement, input, 'focus after slash');
     await new Promise(resolve => setTimeout(resolve));
     assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 1, 'preconnect link');
