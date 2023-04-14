@@ -1,4 +1,4 @@
-/*! typesense-minibar 1.0.0 | https://github.com/jquery/typesense-minibar | License: MIT */
+/*! https://github.com/jquery/typesense-minibar v1.0.0 */
 globalThis.tsminibar = function tsminibar (form, options) {
   const { origin, key, collection } = form.dataset;
   const cache = new Map();
