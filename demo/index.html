@@ -7,12 +7,13 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="demo.css">
 <link rel="stylesheet" href="../typesense-minibar.css">
+<link rel="stylesheet" href="../typesense-minibar-foot.css" disabled>
 <link rel="stylesheet" href="demo-theme.css" disabled>
 <body>
 	<header>
 	    <span class="demo-logo">Minibar</span>
 
-		<form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" action="https://duckduckgo.com">
+		<form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" action="https://duckduckgo.com">
 			<input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
 			<input type="hidden" name="sites" value="qunitjs.com">
 		</form>
@@ -21,7 +22,7 @@
 	    <span class="demo-logo">Minibar</span>
 
 		<h2>data-group=true</h2>
-		<form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-group="true" action="https://duckduckgo.com">
+		<form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
 			<input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
 			<input type="hidden" name="sites" value="jquery.com">
 		</form>
@@ -40,7 +41,7 @@
 			Theme:
 			<label><input type="radio" name="theme" value="none"> CSS disabled</label>
 			<label><input type="radio" name="theme" value="default" checked> Default (base)</label>
-			<label><input type="radio" name="theme" value="demo"> Demo</label>
+			<label><input type="radio" name="theme" value="full"> Full (themed)</label>
 		</fieldset>
 		<p>Compare to:
 			<a href="./compare--docsearch-2.html">DocSearch.js v2</a>
@@ -49,20 +50,24 @@
 	</form>
 	<script type="module">
 		const stylesDemo = document.querySelector('link[href*="demo-theme.css"]');
+		const stylesFoot = document.querySelector('link[href*="typesense-minibar-foot.css"]');
 		const stylesBase = document.querySelector('link[href*="typesense-minibar.css"]');
 		const form = document.querySelector('.demo-stylecontrol');
 		form.addEventListener('change', e => {
 			switch (e.target.value) {
 			case 'none':
 				stylesDemo.disabled = true;
+				stylesFoot.disabled = true;
 				stylesBase.disabled = true;
 				break;
 			case 'default':
 				stylesDemo.disabled = true;
+				stylesFoot.disabled = true;
 				stylesBase.disabled = false;
 				break;
-			case 'demo':
+			case 'full':
 				stylesDemo.disabled = false;
+				stylesFoot.disabled = false;
 				stylesBase.disabled = false;
 				break;
 			}

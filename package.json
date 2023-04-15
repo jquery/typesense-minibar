@@ -39,7 +39,7 @@
     "test": "npm run test-browser && npm run lint",
     "test-browser": "karma start",
     "test-browser-watch": "karma start --auto-watch --no-single-run",
-    "size": "cat typesense-minibar.js | gzip -9 - | wc -c",
+    "size": "echo 'JS ' $(cat typesense-minibar.js | gzip -9 - | wc -c) && echo CSS $(cat typesense-minibar.css | gzip -9 - | wc -c)",
     "serve-demo": "python3 -m http.server 4100"
   },
   "eslintIgnore": [

@@ -1,7 +1,7 @@
 /*! https://github.com/jquery/typesense-minibar v1.0.0 */
 globalThis.tsminibar = function tsminibar (form) {
   const { origin, key, collection } = form.dataset;
-  const group = form.dataset.group === 'true';
+  const group = !!form.dataset.group;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
 
@@ -54,9 +54,7 @@ globalThis.tsminibar = function tsminibar (form) {
       if (e.code === 'Escape') close();
       if (e.code === 'Enter') {
         const url = state.hits[state.cursor]?.url;
-        if (url) {
-          location.href = url;
-        }
+        if (url) location.href = url;
       }
     }
   });
@@ -69,8 +67,8 @@ globalThis.tsminibar = function tsminibar (form) {
 
   function close () {
     if (state.open) {
-      state.open = false;
       state.cursor = -1;
+      state.open = false;
       render();
     }
   }
@@ -100,19 +98,19 @@ globalThis.tsminibar = function tsminibar (form) {
   }
 
   async function search (query) {
-    const cached = cache.get(query);
-    if (cached) {
+    let hits = cache.get(query);
+    if (hits) {
       cache.delete(query);
-      cache.set(query, cached); // LRU
-      return cached;
+      cache.set(query, hits); // LRU
+      return hits;
     }
     const resp = await fetch(
       `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
         q: query,
         per_page: '5',
-        query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
-        include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content,url_without_anchor,url,id',
-        highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
+        query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+        include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
+        highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
         group_by: 'url_without_anchor',
         group_limit: '1',
         sort_by: 'item_priority:desc',
@@ -124,13 +122,13 @@ globalThis.tsminibar = function tsminibar (form) {
     );
     const data = await resp.json();
     let lvl0;
-    const hits = data?.grouped_hits?.map(ghit => {
+    hits = data?.grouped_hits?.map(ghit => {
       const hit = ghit.hits[0];
       return {
         lvl0: group && lvl0 !== hit.document.hierarchy.lvl0 && (lvl0 = hit.document.hierarchy.lvl0),
-        titleHTML: [!group && hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › '),
+        title: [!group && hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › '),
         url: hit.document.url,
-        contentHTML: hit.highlights[0]?.snippet || hit.document.content || ''
+        content: hit.highlights[0]?.snippet || hit.document.content || ''
       };
     }) || [];
     cache.set(query, hits);
@@ -140,28 +138,24 @@ globalThis.tsminibar = function tsminibar (form) {
     return hits;
   }
 
-  function escapeText (s) {
+  function escape (s) {
     return s.replace(/['"<>&]/g, c => ({ "'": '&#039;', '"': '&quot;', '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
   }
 
   function render () {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
-    form.classList.toggle('tsmb-form--group', !!group);
+    form.classList.toggle('tsmb-form--group', group);
     if (state.open) {
-      listbox.innerHTML = state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.titleHTML}</div><div class="tsmb-suggestion_content">${hit.contentHTML}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escapeText(state.query)}'.</div>`;
+      listbox.innerHTML = (state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.title}</div><div class="tsmb-suggestion_content">${hit.content}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escape(state.query)}'.</div>`) + (form.dataset.foot ? '<a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"></a>' : '');
     }
   }
 
   function moveCursor (offset) {
     state.cursor += offset;
     // -1 refers to input field
-    if (state.cursor >= state.hits.length) {
-      state.cursor = -1;
-    }
-    if (state.cursor < -1) {
-      state.cursor = state.hits.length - 1;
-    }
+    if (state.cursor >= state.hits.length) state.cursor = -1;
+    if (state.cursor < -1) state.cursor = state.hits.length - 1;
     render();
   }
 
