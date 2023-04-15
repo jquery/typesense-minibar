@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89% </span>
+                <span class="strong">89.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>89/100</span>
+                <span class='fraction'>91/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.13% </span>
+                <span class="strong">71.21% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/61</span>
+                <span class='fraction'>47/66</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.24% </span>
+                <span class="strong">89.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>83/93</span>
+                <span class='fraction'>85/95</span>
             </div>
         
             
@@ -238,6 +238,7 @@
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
@@ -340,8 +341,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,12 +362,12 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">60x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -381,6 +380,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">20x</span>
@@ -404,8 +404,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! https://github.com/jquery/typesense-minibar v1.0.0 */
-globalThis.tsminibar = function tsminibar (form, options) {
+globalThis.tsminibar = function tsminibar (form) {
   const { origin, key, collection } = form.dataset;
+  const group = form.dataset.group === 'true';
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
 &nbsp;
@@ -438,13 +439,13 @@ globalThis.tsminibar = function tsminibar (form, options) {
   input.addEventListener('input', async () =&gt; {
     const query = state.query = input.value;
     if (!query) {
-      state.hits = []; // avoid non-current hits on focus
+      state.hits = []; // don't leak old hits on focus
       state.cursor = -1;
       close();
       return;
     }
     const hits = await search(query);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (state.query === query) { // ignore response to non-current query
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (state.query === query) { // ignore non-current query
       state.hits = hits;
       state.cursor = -1;
       state.open = true;
@@ -481,7 +482,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
 &nbsp;
   function connect () {
     document.addEventListener('click', onDocClick);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!options || <span class="branch-1 cbranch-no" title="branch not covered" >options.slash !== false)</span> {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (form.dataset.slash !== 'false') {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
     }
@@ -507,11 +508,9 @@ globalThis.tsminibar = function tsminibar (form, options) {
     const cached = cache.get(query);
     if (cached) {
       cache.delete(query);
-      cache.set(query, cached); // track LRU
+      cache.set(query, cached); // LRU
       return cached;
     }
-&nbsp;
-    // https://typesense.org/docs/0.24.1/api/search.html
     const resp = await fetch(
       `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
         q: query,
@@ -529,16 +528,16 @@ globalThis.tsminibar = function tsminibar (form, options) {
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
-    // flatten hits for render()
+    let lvl0;
     const hits = data?.grouped_hits?.map(ghit =&gt; {
       const hit = ghit.hits[0];
       return {
-        titleHtml: [hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl =&gt; !!lvl).join(' › '),
+        lvl0: group &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >lvl0 !== hit.document.hierarchy.lvl0 </span>&amp;&amp; (<span class="branch-2 cbranch-no" title="branch not covered" >lvl0 = hit.document.hierarchy.lvl0)</span>,
+        titleHTML: [!group &amp;&amp; hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl =&gt; !!lvl).join(' › '),
         url: hit.document.url,
-        contentHtml: hit.highlights[0]?.snippet || hit.document.content || ''
+        contentHTML: hit.highlights[0]?.snippet || hit.document.content || ''
       };
     }) || [];
-&nbsp;
     cache.set(query, hits);
     <span class="missing-if-branch" title="if path not taken" >I</span>if (cache.size &gt; 100) {
 <span class="cstat-no" title="statement not covered" >      cache.delete(cache.keys().next().value);</span>
@@ -553,8 +552,9 @@ globalThis.tsminibar = function tsminibar (form, options) {
   function render () {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
+    form.classList.toggle('tsmb-form--group', !!group);
     if (state.open) {
-      listbox.innerHTML = state.hits.map((hit, i) =&gt; `&lt;div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}&gt;&lt;a href="${hit.url}" tabindex="-1"&gt;&lt;div class="tsmb-suggestion_title"&gt;${hit.titleHtml}&lt;/div&gt;&lt;div class="tsmb-suggestion_content"&gt;${hit.contentHtml}&lt;/div&gt;&lt;/a&gt;&lt;/div&gt;`).join('') || `&lt;div class="tsmb-empty"&gt;No results for '${escapeText(state.query)}'.&lt;/div&gt;`;
+      listbox.innerHTML = state.hits.map((hit, i) =&gt; `&lt;div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}&gt;${hit.lvl0 ? <span class="branch-0 cbranch-no" title="branch not covered" >`&lt;div class="tsmb-suggestion_group"&gt;${hit.lvl0}&lt;/div&gt;` </span>: ''}&lt;a href="${hit.url}" tabindex="-1"&gt;&lt;div class="tsmb-suggestion_title"&gt;${hit.titleHTML}&lt;/div&gt;&lt;div class="tsmb-suggestion_content"&gt;${hit.contentHTML}&lt;/div&gt;&lt;/a&gt;&lt;/div&gt;`).join('') || `&lt;div class="tsmb-empty"&gt;No results for '${escapeText(state.query)}'.&lt;/div&gt;`;
     }
   }
 &nbsp;
@@ -580,7 +580,7 @@ document.querySelectorAll('.tsmb-form[data-origin]').forEach(<span class="fstat-
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-04-14T08:15:49.898Z
+                at 2023-04-15T04:52:49.915Z
             </div>
         <script src="prettify.js"></script>
         <script>

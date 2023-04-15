@@ -1,6 +1,7 @@
 /*! https://github.com/jquery/typesense-minibar v1.0.0 */
-globalThis.tsminibar = function tsminibar (form, options) {
+globalThis.tsminibar = function tsminibar (form) {
   const { origin, key, collection } = form.dataset;
+  const group = form.dataset.group === 'true';
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
 
@@ -33,13 +34,13 @@ globalThis.tsminibar = function tsminibar (form, options) {
   input.addEventListener('input', async () => {
     const query = state.query = input.value;
     if (!query) {
-      state.hits = []; // avoid non-current hits on focus
+      state.hits = []; // don't leak old hits on focus
       state.cursor = -1;
       close();
       return;
     }
     const hits = await search(query);
-    if (state.query === query) { // ignore response to non-current query
+    if (state.query === query) { // ignore non-current query
       state.hits = hits;
       state.cursor = -1;
       state.open = true;
@@ -76,7 +77,7 @@ globalThis.tsminibar = function tsminibar (form, options) {
 
   function connect () {
     document.addEventListener('click', onDocClick);
-    if (!options || options.slash !== false) {
+    if (form.dataset.slash !== 'false') {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
     }
@@ -102,11 +103,9 @@ globalThis.tsminibar = function tsminibar (form, options) {
     const cached = cache.get(query);
     if (cached) {
       cache.delete(query);
-      cache.set(query, cached); // track LRU
+      cache.set(query, cached); // LRU
       return cached;
     }
-
-    // https://typesense.org/docs/0.24.1/api/search.html
     const resp = await fetch(
       `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
         q: query,
@@ -124,16 +123,16 @@ globalThis.tsminibar = function tsminibar (form, options) {
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
-    // flatten hits for render()
+    let lvl0;
     const hits = data?.grouped_hits?.map(ghit => {
       const hit = ghit.hits[0];
       return {
-        titleHtml: [hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › '),
+        lvl0: group && lvl0 !== hit.document.hierarchy.lvl0 && (lvl0 = hit.document.hierarchy.lvl0),
+        titleHTML: [!group && hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › '),
         url: hit.document.url,
-        contentHtml: hit.highlights[0]?.snippet || hit.document.content || ''
+        contentHTML: hit.highlights[0]?.snippet || hit.document.content || ''
       };
     }) || [];
-
     cache.set(query, hits);
     if (cache.size > 100) {
       cache.delete(cache.keys().next().value);
@@ -148,8 +147,9 @@ globalThis.tsminibar = function tsminibar (form, options) {
   function render () {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
+    form.classList.toggle('tsmb-form--group', !!group);
     if (state.open) {
-      listbox.innerHTML = state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}><a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.titleHtml}</div><div class="tsmb-suggestion_content">${hit.contentHtml}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escapeText(state.query)}'.</div>`;
+      listbox.innerHTML = state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.titleHTML}</div><div class="tsmb-suggestion_content">${hit.contentHTML}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escapeText(state.query)}'.</div>`;
     }
   }
 
