@@ -79,6 +79,14 @@
 
   Set `data-group="true"` to enable this feature.
 
+* [***data-foot***=false] (Optional): Include a "Search by Typesense" link in the footer.
+
+  Set `data-foot="true"` to enable this feature. When enabled, a plaintext link is added,
+  styled using the Typesense brand color.
+
+  Include [typesense-minibar-foot.css](./typesense-minibar-foot.css) to render the official
+  Typesense wordmark instead.
+
 ## Compatibility
 
 | typesense-minibar | typesense-server | typesense-docsearch-scraper
