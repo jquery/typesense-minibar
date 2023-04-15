@@ -135,6 +135,7 @@ QUnit.module('typesense-minibar', hooks => {
     if (bar) {
       bar.form.remove();
       bar.disconnect();
+      bar = null;
     }
 
     document.head.querySelectorAll('link[rel=preconnect]').forEach(link => link.remove());

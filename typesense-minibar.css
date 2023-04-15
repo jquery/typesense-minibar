@@ -121,7 +121,8 @@
   position: absolute;
   z-index: 10;
 
-  background: #fff;
+  background: var(--tsmb-color-focus-background);
+  color: var(--tsmb-color-focus30);
   width: 100%;
   max-height: 60vh;
   overflow: auto;
@@ -129,21 +130,30 @@
   box-shadow: 0 var(--tsmb-size-sm) 20px rgba(0,0,0,0.12);
 }
 
-.tsmb-form [role="option"] {
-  padding: var(--tsmb-size-base);
-  cursor: pointer;
-  border-left: 2px solid transparent;
-}
-.tsmb-form [role="option"]:not(:first-child) {
-  border-top: 1px solid var(--tsmb-color-focus90);
+.tsmb-suggestion_group {
+  margin: var(--tsmb-size-sm) var(--tsmb-size-sm) 0 var(--tsmb-size-sm);
+  border-bottom: 1px solid var(--tsmb-color-focus90);
 }
 
 .tsmb-form [role="option"] a {
+  display: block;
+  padding: var(--tsmb-size-base);
   text-decoration: none;
+  border-left: 2px solid transparent;
+}
+.tsmb-form [role="option"]:not(:first-child) a {
+  border-top: 1px solid var(--tsmb-color-focus90);
+}
+.tsmb-form--group [role="option"] a {
+  margin: 0 var(--tsmb-size-sm);
+  padding: var(--tsmb-size-sm);
+}
+.tsmb-form--group [role="option"] .tsmb-suggestion_group + a {
+  border-top: 0;
 }
 
-.tsmb-form [role="option"]:hover,
-.tsmb-form [role="option"][aria-selected="true"] {
+.tsmb-form [role="option"] a:hover,
+.tsmb-form [role="option"][aria-selected="true"] a {
   background: var(--tsmb-color-primary90);
   border-left: 2px solid var(--tsmb-color-primary50);
 }
@@ -155,6 +165,7 @@
   font-weight: bold;
 }
 
+.tsmb-suggestion_group,
 .tsmb-suggestion_title,
 .tsmb-suggestion_content {
   white-space: nowrap;
@@ -164,6 +175,10 @@
 
 .tsmb-suggestion_title {
   color: var(--tsmb-color-primary30);
+}
+.tsmb-form--group .tsmb-suggestion_title {
+  font-weight: bold;
+  font-size: var(--tsmb-size-sm);
 }
 
 .tsmb-suggestion_content {
@@ -189,7 +204,7 @@
   .tsmb-form [role=listbox] {
     border-radius: var(--tsmb-border-radius);
     min-width: 500px;
-    margin-top: var(--tsmb-size-base);
+    margin-top: calc(var(--tsmb-size-sm) / 2);
   }
 
   .tsmb-form--slash::after {

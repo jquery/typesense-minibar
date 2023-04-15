@@ -8,7 +8,7 @@
 
 </div>
 
-**minibar** is a fast 2kB autocomplete search bar. It is an alternative to typesense-docsearch.js, Algolia DocSearch, InstantSearch, autocomplete-js, and typesense-js.
+**minibar** is a fast 2kB autocomplete search bar for [Typesense](https://typesense.org/). It is an alternative to typesense-docsearch.js, Algolia DocSearch, InstantSearch, autocomplete-js, and typesense-js.
 
 ## Features
 
@@ -26,9 +26,9 @@
 
 ```html
 <form role="search" class="tsmb-form"
-      data-origin="https://typesense.example"
-      data-collection="example_data"
-      data-key="xxx-searchonly-api-key">
+      data-origin=""
+      data-collection=""
+      data-key="">
   <input type="search">
 </form>
 ```
@@ -38,11 +38,52 @@
 <link rel="stylesheet" href="typesense-minibar.css">
 ```
 
+## API
+
+### Configuration
+
+* ***data-origin*** (Required): Base URL to your Typesense server.
+
+  Include the `https://` or `http://` protocol, and (if non-default) the port number.
+
+  Example: `https://typesense.example.org`
+
+* ***data-collection*** (Required): Which collection to query.
+
+  Equal to the `"index_name"` in your `docsearch.config.json` file. If you index your websites
+  with something other than [docsearch-scraper](https://github.com/typesense/typesense-docsearch-scraper),
+  set this to the name of your Typesense collection ([Typesense API](https://typesense.org/docs/0.24.1/api/collections.html)).
+
+  Example: `example_mine`
+
+* ***data-key*** (Required): Search-only API key ([Typesense API](https://typesense.org/docs/0.24.1/api/api-keys.html#generate-scoped-search-key)).
+
+  Example: `write000less000do000more0`
+
+* [***data-slash***=true] (Optional): Focus the input field if the `/` slash key is pressed.
+
+  When enabled, a `keydown` event listener is added to `document`. Key presses in `<input>` or `<textarea>` elements are safely ignored. If multiple search forms are initiatilised on the same page, the first has precedence.
+
+  Set `data-slash="false"` to disable this feature.
+
+* [***data-group***=false] (Optional): Group results under category headings.
+
+  By default, search results are presented in a flat list, with the `lvl0` field
+  interpreted as the page title, where `lvl0` typicaly selelects `h1`, `lvl1`
+  selects `h2`, and so on.
+
+  To group results under category headings, configure your [docsearch-scraper](https://github.com/typesense/typesense-docsearch-scraper)
+  to have a `lvl0` selector that matches an element on your page that represents
+  the multi-page group that a page belongs to, and `lvl1` would then instead
+  select your `h1` page titles.
+
+  Set `data-group="true"` to enable this feature.
+
 ## Compatibility
 
 | typesense-minibar | typesense-server | typesense-docsearch-scraper
 |--|--|--
-| 1.0 | >= 0.24 | 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" -->
+| 1.0.x | >= 0.24 | 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" -->
 
 ## Browser support
 
@@ -57,7 +98,7 @@ The below matrix describes support for the _enhanced_ JavaScript experience. The
 | Safari | Last three years | Safari 13.1 (2020)
 | iOS | Last three years | iOS 13.4 (2020)
 
-<sup>Technical feature requirements: ES6 syntax, ES2020 Optional chaining, ES2022 Async functions, DOM NodeList-forEach.</sup>
+<sup>Notable feature requirements: ES6 syntax, ES2020 Optional chaining, ES2022 Async functions, DOM NodeList-forEach.</sup>
 
 Practical implications:
 
@@ -68,13 +109,13 @@ Practical implications:
 | Android | [Samsung Galaxy A5](https://en.wikipedia.org/wiki/Samsung_Galaxy_A5_(2016)) (2016) | Android 7.0
 | Android | [Google Pixel 1](https://en.wikipedia.org/wiki/Pixel_(1st_generation)) (2016) | Android 7.0
 | iOS | [iPhone 6S](https://en.wikipedia.org/wiki/IPhone_6S) (2015) | iOS 13.4 (2020) upto iOS 15 (2022)
-| Linux | Debian 9 Stretch (2018) | [firefox-esr 91](https://packages.debian.org/oldoldstable/firefox-esr)
-| Linux | Debian 10 Stretch (2019) | [firefox-esr 102](https://packages.debian.org/oldstable/firefox-esr), [chromium 90](https://packages.debian.org/oldstable/chromium)
+| Linux | Debian 9 Stretch (2018) | [firefox-esr](https://packages.debian.org/oldoldstable/firefox-esr) (91)
+| Linux | Debian 10 Stretch (2019) | [firefox-esr](https://packages.debian.org/oldstable/firefox-esr) (102), [chromium](https://packages.debian.org/oldstable/chromium) (90)
 | Linux | Ubuntu 18.04 LTS (2018) | current [firefox](https://packages.ubuntu.com/bionic/firefox), current [chromium-browser](https://packages.ubuntu.com/bionic/chromium-browser)
 | macOS | OS X 10.9 Mavericks (2013-2016) | Firefox 78 ESR (2020)<br>(Safari 7 default unsupported)
 | macOS | OS X 10.13 Mavericks (2017-2020) | Firefox 78 ESR (2020), Chrome 80+<br>(Safari 11 default unsupported)
 | macOS | OS X 10.15 Catalina (2019-2022) | Safari 13.1, Firefox 78 ESR (2020), Chrome 80+
-| Windows | Windows 7 (2009) | current Edge, current Firefox
+| Windows | Windows 7 (2009) or later | current Edge, current Firefox
 
 Notes:
 * [Firefox release schedule](https://whattrainisitnow.com/calendar/)

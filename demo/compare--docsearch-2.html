@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@1.0.0/dist/cdn/docsearch.css">
 <body>
 	<header>
+		<h2>DocSearch.js v2</h2>
 		<input type="search" id="searchbar">
 	</header>
 
@@ -22,8 +23,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@1.0.0/dist/cdn/docsearch.js"></script>
 	<script>
 	docsearch({
+		debug: true,
 		inputSelector: '#searchbar',
-		typesenseCollectionName: 'qunitjs_com',
+		typesenseCollectionName: 'jquery_com',
 		typesenseServerConfig: {
 			nodes: [{
 				host: 'typesense.jquery.com',
