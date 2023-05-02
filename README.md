@@ -117,9 +117,9 @@ Practical implications:
 | Android | [Samsung Galaxy A5](https://en.wikipedia.org/wiki/Samsung_Galaxy_A5_(2016)) (2016) | Android 7.0
 | Android | [Google Pixel 1](https://en.wikipedia.org/wiki/Pixel_(1st_generation)) (2016) | Android 7.0
 | iOS | [iPhone 6S](https://en.wikipedia.org/wiki/IPhone_6S) (2015) | iOS 13.4 (2020) upto iOS 15 (2022)
-| Linux | Debian 9 Stretch (2018) | [firefox-esr](https://packages.debian.org/oldoldstable/firefox-esr) (91)
-| Linux | Debian 10 Stretch (2019) | [firefox-esr](https://packages.debian.org/oldstable/firefox-esr) (102), [chromium](https://packages.debian.org/oldstable/chromium) (90)
-| Linux | Ubuntu 18.04 LTS (2018) | current [firefox](https://packages.ubuntu.com/bionic/firefox), current [chromium-browser](https://packages.ubuntu.com/bionic/chromium-browser)
+| Linux | Debian 9 Stretch (2018) | `firefox-esr` 91
+| Linux | Debian 10 Buster (2019) | `firefox-esr` 102, `chromium` 90)
+| Linux | Ubuntu 18.04 LTS (2018) | current `firefox`, current `chromium-browser`
 | macOS | OS X 10.9 Mavericks (2013-2016) | Firefox 78 ESR (2020)<br>(Safari 7 default unsupported)
 | macOS | OS X 10.13 Mavericks (2017-2020) | Firefox 78 ESR (2020), Chrome 80+<br>(Safari 11 default unsupported)
 | macOS | OS X 10.15 Catalina (2019-2022) | Safari 13.1, Firefox 78 ESR (2020), Chrome 80+
