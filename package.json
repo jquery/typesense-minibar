@@ -1,11 +1,19 @@
 {
   "name": "typesense-minibar",
   "description": "Fast 2kB autocomplete search bar",
-  "version": "0.0.1",
-  "homepage": "https://github.com/jquery/typesense-minibar/",
+  "version": "1.0.0",
+  "homepage": "https://github.com/jquery/typesense-minibar",
+  "license": "MIT",
   "author": {
     "name": "Timo Tijhof",
     "url": "https://timotijhof.net"
+  },
+  "bugs": {
+    "url": "https://github.com/jquery/typesense-minibar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jquery/typesense-minibar.git"
   },
   "keywords": [
     "autocomplete",
@@ -19,10 +27,6 @@
     "melisearch",
     "search"
   ],
-  "bugs": {
-    "url": "https://github.com/jquery/typesense-minibar/issues"
-  },
-  "license": "MIT",
   "files": [
     "typesense-minibar.js",
     "typesense-minibar.css",
