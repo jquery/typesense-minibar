@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Continuous integration](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml/badge.svg)](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
-[![Test coverage](https://img.shields.io/badge/coverage-89%25-brightgreen.svg)](https://jquery.github.io/typesense-minibar/coverage/)
+[![Test coverage](https://img.shields.io/badge/coverage-92%25-brightgreen.svg)](https://jquery.github.io/typesense-minibar/coverage/)
 [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 </div>
@@ -38,6 +38,19 @@
 <script defer type="module" src="typesense-minibar.js"></script>
 <link rel="stylesheet" href="typesense-minibar.css">
 ```
+
+Distribution:
+
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.0.0/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.0.0/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.0.0/typesense-minibar.css)
+* npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
+  ```shell
+  npm i --save typesense-minibar
+  ```
+  ```js
+  require('typesense-minibar');
+  import 'typesense-minibar';
+  ```
 
 ## API
 

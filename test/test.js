@@ -284,6 +284,27 @@ QUnit.module('typesense-minibar', hooks => {
     assert.true(listbox.hidden, 'listbox hidden');
   });
 
+  QUnit.test('listbox [re-open on click]', async assert => {
+    const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox hidden');
+
+    simulate(input, 'click', { bubbles: true });
+    assert.false(listbox.hidden, 'listbox re-opened');
+  });
+
   QUnit.test('listbox [arrow key cursor]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
