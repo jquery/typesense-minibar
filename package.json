@@ -30,6 +30,7 @@
   "files": [
     "typesense-minibar.js",
     "typesense-minibar.css",
+    "typesense-minibar-foot.css",
     "LICENSE.txt"
   ],
   "main": "typesense-minibar.js",
