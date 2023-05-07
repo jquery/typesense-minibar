@@ -39,6 +39,19 @@
 <link rel="stylesheet" href="typesense-minibar.css">
 ```
 
+Distribution:
+
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.0.0/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.0.0/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.0.0/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.0.0/typesense-minibar.css)
+* npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
+  ```shell
+  npm i --save typesense-minibar
+  ```
+  ```js
+  require('typesense-minibar');
+  import 'typesense-minibar';
+  ```
+
 ## API
 
 ### Configuration
