@@ -18,18 +18,19 @@
 * **Responsive**, mobile-first layout
 * **Accessible**, keyboard navigation, arrow keys, close on `Esc` or outside click
 * **Fast**, leverages preconnect (Resource Hints), LRU memory cache
-* **Easy to install**, fully declarative via HTML (no-code setup!)
+* **Easy to install**, fully declarative via HTML (zero-code setup!)
 
 ## Getting started
 
 **[Demo](https://jquery.github.io/typesense-minibar/demo/)**
 
 ```html
-<form role="search" class="tsmb-form"
+<form role="search" class="tsmb-form" action="https://duckduckgo.com"
       data-origin=""
       data-collection=""
       data-key="">
-  <input type="search">
+  <input type="search" name="q" placeholder="Search..." autocomplete="off">
+  <input type="hidden" name="sites" value="example.org">
 </form>
 ```
 
@@ -68,14 +69,13 @@
 
 * [***data-group***=false] (Optional): Group results under category headings.
 
-  By default, search results are presented in a flat list, with the `lvl0` field
-  interpreted as the page title, where `lvl0` typicaly selelects `h1`, `lvl1`
-  selects `h2`, and so on.
+  By default, search results render in a flat list, with the `lvl0` field
+  as the page title, where `lvl0` typicaly selects h1, `lvl1` selects h2,
+  and so on.
 
-  To group results under category headings, configure your [docsearch-scraper](https://github.com/typesense/typesense-docsearch-scraper)
-  to have a `lvl0` selector that matches an element on your page that represents
-  the multi-page group that a page belongs to, and `lvl1` would then instead
-  select your `h1` page titles.
+  To group results by category, configure [docsearch-scraper](https://github.com/typesense/typesense-docsearch-scraper)
+  with `lvl0` selecting the category (not the `h1`). And `lvl1` should then
+  instead select your `h1` page titles.
 
   Set `data-group="true"` to enable this feature.
 
@@ -87,15 +87,23 @@
   Include [typesense-minibar-foot.css](./typesense-minibar-foot.css) to render the official
   Typesense wordmark instead.
 
+### Styling and theming
+
+The accompanying stylesheet exposes **CSS variables** that you can override to
+tweak styles, without writing custom CSS. Alternatively, you can target stable
+selectors based on the **semantic HTML**.
+
+Refer to [Style API](./API-Style.md) for the CSS variable names and selectors.
+
 ## Compatibility
 
 | typesense-minibar | typesense-server | typesense-docsearch-scraper
 |--|--|--
 | 1.0.x | >= 0.24 | 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" -->
 
-## Browser support
+### Browser support
 
-The below matrix describes support for the _enhanced_ JavaScript experience. The basic HTML experience, which falls back to submitting a form to DuckDuckGo, works in all known browsers (including IE 6, IE 5 for Mac, and Netscape Navigator).
+The below matrix describes support for the _enhanced_ JavaScript experience. The HTML experience falls back to submitting a form to DuckDuckGo, and works in all known browsers (including  IE 6 and Netscape Navigator).
 
 | Browser | Policy | Version
 |--|--|--
