@@ -160,7 +160,7 @@ QUnit.module('typesense-minibar', hooks => {
       resp: API_RESP_EMPTY,
       expect: `<div class="tsmb-empty">No results for 'something&lt;'.</div>`
     },
-    'result with title-only': {
+    'title-only': {
       value: 'something',
       resp: API_RESP_TITLE_MATCH,
       expect: `<div role="option">
@@ -170,7 +170,7 @@ QUnit.module('typesense-minibar', hooks => {
         </a>
       </div>`
     },
-    'result with title, headings, and snippet': {
+    'title, headings, and snippet': {
       value: 'something',
       resp: API_RESP_FULL_MATCH_SOMETHING,
       expect: `<div role="option">
@@ -182,6 +182,44 @@ QUnit.module('typesense-minibar', hooks => {
     },
   }, async (assert, { value, resp, expect }) => {
     const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
+
+    mockFetchResponse = resp;
+    input.value = value;
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+
+    assert.equal(normalizeHTML(listbox.innerHTML), normalizeHTML(expect), 'listbox HTML');
+  });
+
+  QUnit.test.each('input with grouped results', {
+    'title-only': {
+      value: 'something',
+      resp: API_RESP_TITLE_MATCH,
+      expect: `<div role="option">
+        <div class="tsmb-suggestion_group">Page</div>
+        <a href="https://example.test/page" tabindex="-1">
+          <div class="tsmb-suggestion_title">Page</div>
+          <div class="tsmb-suggestion_content"></div>
+        </a>
+      </div>`
+    },
+    'title, headings, and snippet': {
+      value: 'something',
+      resp: API_RESP_FULL_MATCH_SOMETHING,
+      expect: `<div role="option">
+        <div class="tsmb-suggestion_group">Some</div>
+        <a href="https://example.test/some" tabindex="-1">
+          <div class="tsmb-suggestion_title">Thing</div>
+          <div class="tsmb-suggestion_content">Foo <mark>something</mark> baz.</div>
+        </a>
+      </div>`
+    },
+  }, async (assert, { value, resp, expect }) => {
+    const form = parseHTML('<form data-group="true"><input type="search"></form>');
     const input = form.firstChild;
     bar = tsminibar(form);
     const listbox = form.querySelector('[role=listbox]');
