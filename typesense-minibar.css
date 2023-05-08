@@ -185,7 +185,8 @@
   text-align: right;
   font-size: var(--tsmb-size-sm);
   line-height: 18px;
-  margin: var(--tsmb-size-half) var(--tsmb-size-sm);
+  padding: var(--tsmb-size-half) var(--tsmb-size-sm);
+  box-shadow: 0 0 10px rgba(0,0,0,0.12);
 }
 .tsmb-foot:hover {
   text-decoration: none;
