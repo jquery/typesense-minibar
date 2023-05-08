@@ -126,7 +126,7 @@ globalThis.tsminibar = function tsminibar (form) {
       const hit = ghit.hits[0];
       return {
         lvl0: group && lvl0 !== hit.document.hierarchy.lvl0 && (lvl0 = hit.document.hierarchy.lvl0),
-        title: [!group && hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › '),
+        title: [!group && hit.document.hierarchy.lvl0, hit.document.hierarchy.lvl1, hit.document.hierarchy.lvl2, hit.document.hierarchy.lvl3, hit.document.hierarchy.lvl4, hit.document.hierarchy.lvl5].filter(lvl => !!lvl).join(' › ') || hit.document.hierarchy.lvl0,
         url: hit.document.url,
         content: hit.highlights[0]?.snippet || hit.document.content || ''
       };
