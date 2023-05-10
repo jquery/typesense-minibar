@@ -5,9 +5,9 @@
 <title>minibar | Demo</title>
 <script defer type="module" src="../typesense-minibar.js"></script>
 <link rel="icon" href="../assets/logo.svg">
-<link rel="stylesheet" href="demo.css">
 <link rel="stylesheet" href="../typesense-minibar.css">
 <link rel="stylesheet" href="../typesense-minibar-foot.css" disabled>
+<link rel="stylesheet" href="demo.css">
 <link rel="stylesheet" href="demo-theme.css" disabled>
 <body>
 	<header>
@@ -28,6 +28,12 @@
 		</form>
 	</header>
 	<main>
+		<h2>customize layout</h2>
+		<form role="search" class="tsmb-form demo-custom-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
+			<input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
+			<input type="hidden" name="sites" value="jquery.com">
+		</form>
+
 		<h2>JavaScript disabled</h2>
 		<form role="search" class="tsmb-form" action="https://duckduckgo.com">
 			<input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
