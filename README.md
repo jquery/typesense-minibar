@@ -100,6 +100,15 @@ Distribution:
   Include [typesense-minibar-foot.css](./typesense-minibar-foot.css) to render the official
   Typesense wordmark instead.
 
+* [***data-search-params***=""] (Optional): Modify search query parameters.
+
+  Each key-value pair will be added as a search query parameter, or will override the default value.
+  This property must be a valid URL parameters sequence, e.g. `"key1=value1&key2=value2"`.
+
+  Refer to [typesense-minibar.js](./typesense-minibar.js) for the default search query parameters.
+  Refer to [Typesense documentation](https://typesense.org/docs/0.24.1/api/search.html#search-parameters)
+  for all the valid parameters.
+
 ### Styling and theming
 
 The accompanying stylesheet exposes **CSS variables** that you can override to
