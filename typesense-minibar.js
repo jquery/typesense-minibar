@@ -1,9 +1,22 @@
 /*! https://github.com/jquery/typesense-minibar 1.0.2 */
 globalThis.tsminibar = function tsminibar (form) {
-  const { origin, key, collection } = form.dataset;
+  const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
+  const searchParams = new URLSearchParams({
+    per_page: '5',
+    query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
+    highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    group_by: 'url_without_anchor',
+    group_limit: '1',
+    sort_by: 'item_priority:desc',
+    snippet_threshold: '8',
+    highlight_affix_num_tokens: '12',
+    'x-typesense-api-key': form.dataset.key,
+    ...JSON.parse(form.dataset.searchParams || '{}')
+  });
 
   const input = form.querySelector('input[type=search]');
   const listbox = document.createElement('div');
@@ -104,20 +117,9 @@ globalThis.tsminibar = function tsminibar (form) {
       cache.set(query, hits); // LRU
       return hits;
     }
+    searchParams.set("q", query);
     const resp = await fetch(
-      `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
-        q: query,
-        per_page: '5',
-        query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
-        highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        group_by: 'url_without_anchor',
-        group_limit: '1',
-        sort_by: 'item_priority:desc',
-        snippet_threshold: '8',
-        highlight_affix_num_tokens: '12',
-        'x-typesense-api-key': key,
-      }),
+      `${origin}/collections/${collection}/documents/search?` + searchParams,
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
