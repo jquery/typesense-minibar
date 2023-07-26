@@ -17,6 +17,7 @@ globalThis.tsminibar = function tsminibar (form) {
     'x-typesense-api-key': form.dataset.key,
     ...JSON.parse(form.dataset.searchParams || '{}')
   });
+  const noResults = form.dataset.noResults || "No results for '{}'.";
 
   const input = form.querySelector('input[type=search]');
   const listbox = document.createElement('div');
@@ -148,7 +149,7 @@ globalThis.tsminibar = function tsminibar (form) {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
     if (state.open) {
-      listbox.innerHTML = (state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.title}</div><div class="tsmb-suggestion_content">${hit.content}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escape(state.query)}'.</div>`) + (form.dataset.foot ? '<a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"></a>' : '');
+      listbox.innerHTML = (state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.title}</div><div class="tsmb-suggestion_content">${hit.content}</div></a></div>`).join('') || `<div class="tsmb-empty">${noResults.replaceAll('{}', escape(state.query))}</div>`) + (form.dataset.foot ? '<a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"></a>' : '');
     }
   }
 
