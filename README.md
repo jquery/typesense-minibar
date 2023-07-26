@@ -109,6 +109,10 @@ Distribution:
   Refer to [Typesense documentation](https://typesense.org/docs/0.24.1/api/search.html#search-parameters)
   for all the valid parameters.
 
+* [***data-no-results***="No results for '{}'."] (Optional): The message to display when no results are found.
+
+  The sequence of 2 curly brackets `{}` will be substituted with the queried text.
+
 ### Styling and theming
 
 The accompanying stylesheet exposes **CSS variables** that you can override to
