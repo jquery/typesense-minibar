@@ -111,7 +111,7 @@ Distribution:
 
 * [***data-no-results***="No results for '{}'."] (Optional): The message to display when no results are found.
 
-  Each sequence of 2 curly brackets `{}` will be substituted with the queried text.
+  The sequence of 2 curly brackets `{}` will be substituted with the queried text.
 
 ### Styling and theming
 
