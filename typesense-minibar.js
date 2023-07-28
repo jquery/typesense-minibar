@@ -15,7 +15,7 @@ globalThis.tsminibar = function tsminibar (form) {
     snippet_threshold: '8',
     highlight_affix_num_tokens: '12',
     'x-typesense-api-key': form.dataset.key,
-    ...JSON.parse(form.dataset.searchParams || '{}')
+    ...Object.fromEntries(new URLSearchParams(form.dataset.searchParams))
   });
   const noResults = form.dataset.noResults || "No results for '{}'.";
 
