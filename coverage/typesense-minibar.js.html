@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.3% </span>
+                <span class="strong">92.23% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>96/104</span>
+                <span class='fraction'>95/103</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.61% </span>
+                <span class="strong">93.54% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>88/94</span>
+                <span class='fraction'>87/93</span>
             </div>
         
             
@@ -228,8 +228,7 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
@@ -271,18 +270,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
@@ -290,6 +282,12 @@
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
@@ -339,6 +337,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -355,7 +354,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
@@ -400,7 +398,7 @@ globalThis.tsminibar = function tsminibar (form) {
   const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
   const cache = new Map();
-  const state = { query: '', hits: [], cursor: -1, open: false };
+  const state = { query: '', cursor: -1, open: false, hits: [] };
   const searchParams = new URLSearchParams({
     per_page: '5',
     query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
@@ -423,11 +421,11 @@ globalThis.tsminibar = function tsminibar (form) {
   input.after(listbox);
 &nbsp;
   let preconnect = null;
-  input.addEventListener('focus', () =&gt; {
+  input.addEventListener('focus', function () {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (!preconnect) {
       preconnect = document.createElement('link');
       preconnect.rel = 'preconnect';
-      preconnect.crossOrigin = 'anonymous'; // for fetch mode:cors,credentials:omit
+      preconnect.crossOrigin = 'anonymous'; // match fetch cors,credentials:omit
       preconnect.href = origin;
       document.head.append(preconnect);
     }
@@ -436,19 +434,12 @@ globalThis.tsminibar = function tsminibar (form) {
 <span class="cstat-no" title="statement not covered" >      render();</span>
     }
   });
-  input.addEventListener('click', () =&gt; {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!state.open &amp;&amp; state.hits.length) {
-      state.open = true;
-      render();
-    }
-  });
-  input.addEventListener('input', async () =&gt; {
+  input.addEventListener('input', async function () {
     const query = state.query = input.value;
     if (!query) {
       state.hits = []; // don't leak old hits on focus
       state.cursor = -1;
-      close();
-      return;
+      return close();
     }
     const hits = await search(query);
     <span class="missing-if-branch" title="else path not taken" >E</span>if (state.query === query) { // ignore non-current query
@@ -458,8 +449,14 @@ globalThis.tsminibar = function tsminibar (form) {
       render();
     }
   });
-  input.addEventListener('keydown', (e) =&gt; {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)) {
+  input.addEventListener('click', function () {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!state.open &amp;&amp; state.hits.length) {
+      state.open = true;
+      render();
+    }
+  });
+  input.addEventListener('keydown', function (e) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!e.altKey &amp;&amp; !e.ctrlKey &amp;&amp; !e.metaKey &amp;&amp; !e.shiftKey) {
       if (e.code === 'ArrowDown') moveCursor(1);
       if (e.code === 'ArrowUp') moveCursor(-1);
       if (e.code === 'Escape') close();
@@ -469,7 +466,7 @@ globalThis.tsminibar = function tsminibar (form) {
       }
     }
   });
-  form.addEventListener('submit', <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+  form.addEventListener('submit', <span class="fstat-no" title="function not covered" >fu</span>nction (e) {
 <span class="cstat-no" title="statement not covered" >    e.preventDefault(); </span>// disable fallback
   });
   form.insertAdjacentHTML('beforeend', '&lt;svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"&gt;&lt;path d="M9 3L3 9M3 3L9 9"/&gt;&lt;/svg&gt;');
@@ -509,6 +506,7 @@ globalThis.tsminibar = function tsminibar (form) {
   }
 &nbsp;
   async function search (query) {
+    let lvl0;
     let hits = cache.get(query);
     if (hits) {
       cache.delete(query);
@@ -521,7 +519,6 @@ globalThis.tsminibar = function tsminibar (form) {
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
-    let lvl0;
     hits = data?.grouped_hits?.map(ghit =&gt; {
       const hit = ghit.hits[0];
       return {
@@ -568,7 +565,7 @@ document.querySelectorAll('.tsmb-form[data-origin]').forEach(<span class="fstat-
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-24T18:12:43.820Z
+                at 2023-08-24T23:39:12.334Z
             </div>
         <script src="prettify.js"></script>
         <script>

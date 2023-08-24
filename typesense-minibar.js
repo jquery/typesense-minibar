@@ -3,7 +3,7 @@ globalThis.tsminibar = function tsminibar (form) {
   const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
   const cache = new Map();
-  const state = { query: '', hits: [], cursor: -1, open: false };
+  const state = { query: '', cursor: -1, open: false, hits: [] };
   const searchParams = new URLSearchParams({
     per_page: '5',
     query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
@@ -26,11 +26,11 @@ globalThis.tsminibar = function tsminibar (form) {
   input.after(listbox);
 
   let preconnect = null;
-  input.addEventListener('focus', () => {
+  input.addEventListener('focus', function () {
     if (!preconnect) {
       preconnect = document.createElement('link');
       preconnect.rel = 'preconnect';
-      preconnect.crossOrigin = 'anonymous'; // for fetch mode:cors,credentials:omit
+      preconnect.crossOrigin = 'anonymous'; // match fetch cors,credentials:omit
       preconnect.href = origin;
       document.head.append(preconnect);
     }
@@ -39,19 +39,12 @@ globalThis.tsminibar = function tsminibar (form) {
       render();
     }
   });
-  input.addEventListener('click', () => {
-    if (!state.open && state.hits.length) {
-      state.open = true;
-      render();
-    }
-  });
-  input.addEventListener('input', async () => {
+  input.addEventListener('input', async function () {
     const query = state.query = input.value;
     if (!query) {
       state.hits = []; // don't leak old hits on focus
       state.cursor = -1;
-      close();
-      return;
+      return close();
     }
     const hits = await search(query);
     if (state.query === query) { // ignore non-current query
@@ -61,8 +54,14 @@ globalThis.tsminibar = function tsminibar (form) {
       render();
     }
   });
-  input.addEventListener('keydown', (e) => {
-    if (!(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)) {
+  input.addEventListener('click', function () {
+    if (!state.open && state.hits.length) {
+      state.open = true;
+      render();
+    }
+  });
+  input.addEventListener('keydown', function (e) {
+    if (!e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
       if (e.code === 'ArrowDown') moveCursor(1);
       if (e.code === 'ArrowUp') moveCursor(-1);
       if (e.code === 'Escape') close();
@@ -72,7 +71,7 @@ globalThis.tsminibar = function tsminibar (form) {
       }
     }
   });
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', function (e) {
     e.preventDefault(); // disable fallback
   });
   form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
@@ -112,6 +111,7 @@ globalThis.tsminibar = function tsminibar (form) {
   }
 
   async function search (query) {
+    let lvl0;
     let hits = cache.get(query);
     if (hits) {
       cache.delete(query);
@@ -124,7 +124,6 @@ globalThis.tsminibar = function tsminibar (form) {
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
-    let lvl0;
     hits = data?.grouped_hits?.map(ghit => {
       const hit = ghit.hits[0];
       return {
