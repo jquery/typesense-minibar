@@ -118,7 +118,7 @@ globalThis.tsminibar = function tsminibar (form) {
       cache.set(query, hits); // LRU
       return hits;
     }
-    searchParams.set("q", query);
+    searchParams.set('q', query);
     const resp = await fetch(
       `${origin}/collections/${collection}/documents/search?` + searchParams,
       { mode: 'cors', credentials: 'omit', method: 'GET' }
