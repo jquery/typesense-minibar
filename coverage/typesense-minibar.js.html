@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.07% </span>
+                <span class="strong">92.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>93/101</span>
+                <span class='fraction'>96/104</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">80.55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>56/70</span>
+                <span class='fraction'>58/72</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.4% </span>
+                <span class="strong">93.61% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>85/91</span>
+                <span class='fraction'>88/94</span>
             </div>
         
             
@@ -226,11 +226,28 @@
 <a name='L161'></a><a href='#L161'>161</a>
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
-<a name='L164'></a><a href='#L164'>164</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -333,18 +350,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,10 +397,24 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! https://github.com/jquery/typesense-minibar 1.0.2 */
 globalThis.tsminibar = function tsminibar (form) {
-  const { origin, key, collection } = form.dataset;
+  const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
+  const searchParams = new URLSearchParams({
+    per_page: '5',
+    query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
+    highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    group_by: 'url_without_anchor',
+    group_limit: '1',
+    sort_by: 'item_priority:desc',
+    snippet_threshold: '8',
+    highlight_affix_num_tokens: '12',
+    'x-typesense-api-key': form.dataset.key,
+    ...Object.fromEntries(new URLSearchParams(form.dataset.searchParams))
+  });
+  const noResults = form.dataset.noResults || "No results for '{}'.";
 &nbsp;
   const input = form.querySelector('input[type=search]');
   const listbox = document.createElement('div');
@@ -495,20 +515,9 @@ globalThis.tsminibar = function tsminibar (form) {
       cache.set(query, hits); // LRU
       return hits;
     }
+    searchParams.set('q', query);
     const resp = await fetch(
-      `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
-        q: query,
-        per_page: '5',
-        query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
-        highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        group_by: 'url_without_anchor',
-        group_limit: '1',
-        sort_by: 'item_priority:desc',
-        snippet_threshold: '8',
-        highlight_affix_num_tokens: '12',
-        'x-typesense-api-key': key,
-      }),
+      `${origin}/collections/${collection}/documents/search?` + searchParams,
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
@@ -537,7 +546,7 @@ globalThis.tsminibar = function tsminibar (form) {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
     if (state.open) {
-      listbox.innerHTML = (state.hits.map((hit, i) =&gt; `&lt;div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}&gt;${hit.lvl0 ? `&lt;div class="tsmb-suggestion_group"&gt;${hit.lvl0}&lt;/div&gt;` : ''}&lt;a href="${hit.url}" tabindex="-1"&gt;&lt;div class="tsmb-suggestion_title"&gt;${hit.title}&lt;/div&gt;&lt;div class="tsmb-suggestion_content"&gt;${hit.content}&lt;/div&gt;&lt;/a&gt;&lt;/div&gt;`).join('') || `&lt;div class="tsmb-empty"&gt;No results for '${escape(state.query)}'.&lt;/div&gt;`) + (form.dataset.foot ? <span class="branch-0 cbranch-no" title="branch not covered" >'&lt;a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"&gt;&lt;/a&gt;' </span>: '');
+      listbox.innerHTML = (state.hits.map((hit, i) =&gt; `&lt;div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}&gt;${hit.lvl0 ? `&lt;div class="tsmb-suggestion_group"&gt;${hit.lvl0}&lt;/div&gt;` : ''}&lt;a href="${hit.url}" tabindex="-1"&gt;&lt;div class="tsmb-suggestion_title"&gt;${hit.title}&lt;/div&gt;&lt;div class="tsmb-suggestion_content"&gt;${hit.content}&lt;/div&gt;&lt;/a&gt;&lt;/div&gt;`).join('') || `&lt;div class="tsmb-empty"&gt;${noResults.replace('{}', escape(state.query))}&lt;/div&gt;`) + (form.dataset.foot ? <span class="branch-0 cbranch-no" title="branch not covered" >'&lt;a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"&gt;&lt;/a&gt;' </span>: '');
     }
   }
 &nbsp;
@@ -559,7 +568,7 @@ document.querySelectorAll('.tsmb-form[data-origin]').forEach(<span class="fstat-
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-05-10T23:47:24.498Z
+                at 2023-08-24T18:12:43.820Z
             </div>
         <script src="prettify.js"></script>
         <script>

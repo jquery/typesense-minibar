@@ -1,9 +1,23 @@
 /*! https://github.com/jquery/typesense-minibar 1.0.2 */
 globalThis.tsminibar = function tsminibar (form) {
-  const { origin, key, collection } = form.dataset;
+  const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
   const cache = new Map();
   const state = { query: '', hits: [], cursor: -1, open: false };
+  const searchParams = new URLSearchParams({
+    per_page: '5',
+    query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
+    highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
+    group_by: 'url_without_anchor',
+    group_limit: '1',
+    sort_by: 'item_priority:desc',
+    snippet_threshold: '8',
+    highlight_affix_num_tokens: '12',
+    'x-typesense-api-key': form.dataset.key,
+    ...Object.fromEntries(new URLSearchParams(form.dataset.searchParams))
+  });
+  const noResults = form.dataset.noResults || "No results for '{}'.";
 
   const input = form.querySelector('input[type=search]');
   const listbox = document.createElement('div');
@@ -104,20 +118,9 @@ globalThis.tsminibar = function tsminibar (form) {
       cache.set(query, hits); // LRU
       return hits;
     }
+    searchParams.set('q', query);
     const resp = await fetch(
-      `${origin}/collections/${collection}/documents/search?` + new URLSearchParams({
-        q: query,
-        per_page: '5',
-        query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        include_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content,url_without_anchor,url,id',
-        highlight_full_fields: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,content',
-        group_by: 'url_without_anchor',
-        group_limit: '1',
-        sort_by: 'item_priority:desc',
-        snippet_threshold: '8',
-        highlight_affix_num_tokens: '12',
-        'x-typesense-api-key': key,
-      }),
+      `${origin}/collections/${collection}/documents/search?` + searchParams,
       { mode: 'cors', credentials: 'omit', method: 'GET' }
     );
     const data = await resp.json();
@@ -146,7 +149,7 @@ globalThis.tsminibar = function tsminibar (form) {
     listbox.hidden = !state.open;
     form.classList.toggle('tsmb-form--open', state.open);
     if (state.open) {
-      listbox.innerHTML = (state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.title}</div><div class="tsmb-suggestion_content">${hit.content}</div></a></div>`).join('') || `<div class="tsmb-empty">No results for '${escape(state.query)}'.</div>`) + (form.dataset.foot ? '<a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"></a>' : '');
+      listbox.innerHTML = (state.hits.map((hit, i) => `<div role="option"${i === state.cursor ? ' aria-selected="true"' : ''}>${hit.lvl0 ? `<div class="tsmb-suggestion_group">${hit.lvl0}</div>` : ''}<a href="${hit.url}" tabindex="-1"><div class="tsmb-suggestion_title">${hit.title}</div><div class="tsmb-suggestion_content">${hit.content}</div></a></div>`).join('') || `<div class="tsmb-empty">${noResults.replace('{}', escape(state.query))}</div>`) + (form.dataset.foot ? '<a href="https://typesense.org" class="tsmb-foot" title="Search by Typesense"></a>' : '');
     }
   }
 
