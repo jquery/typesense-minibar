@@ -59,16 +59,20 @@ git push origin HEAD:release
 
 ```sh
 git push origin HEAD:main
+```
 
-# Clean up old branch
+Clean up old branch:
+
+```sh
 git push origin :release
-git push remote prune origin
+git remote prune origin
 ```
 
 4. Push signed tag to Git and publish to npm.
 
 ```sh
-git tag -s $MINIBAR_VERSION -m "Release $MINIBAR_VERSION"
-git push --tags
+git tag -s $MINIBAR_VERSION -m "Release $MINIBAR_VERSION" && git push --tags
+```
+```sh
 npm publish
 ```
