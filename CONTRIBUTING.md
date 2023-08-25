@@ -32,3 +32,43 @@ python3 -m http.server 4100
 ```
 
 Open <http://localhost:4100/demo/>
+
+## Release process
+
+1. Bump version numbers
+
+```sh
+export MINIBAR_VERSION=x.y.z
+```
+```sh
+sed -i'.bak' "s/typesense-minibar [0-9\.]*/typesense-minibar $MINIBAR_VERSION/" typesense-minibar* && \
+sed -i'.bak' "s/minibar@[^/]*/minibar@$MINIBAR_VERSION/g" README.md && \
+sed -i'.bak' 's/"version": "[^"]*"/"version": "'$MINIBAR_VERSION'"/' package.json && \
+rm *.bak
+```
+
+2. Stage commit and push for review.
+
+```sh
+git add -p && \
+git commit -m "Release $MINIBAR_VERSION" && \
+git push origin HEAD:release
+```
+
+3. Merge once CI has passed, or test locally in a secure environment using `npm install-test`.
+
+```sh
+git push origin HEAD:main
+
+# Clean up old branch
+git push origin :release
+git push remote prune origin
+```
+
+4. Push signed tag to Git and publish to npm.
+
+```sh
+git tag -s $MINIBAR_VERSION -m "Release $MINIBAR_VERSION"
+git push --tags
+npm publish
+```
