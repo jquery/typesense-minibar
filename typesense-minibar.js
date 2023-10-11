@@ -75,7 +75,11 @@ globalThis.tsminibar = function tsminibar (form) {
     e.preventDefault(); // disable fallback
   });
   form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
-  form.querySelector('.tsmb-icon-close').addEventListener('click', close);
+  form.querySelector('.tsmb-icon-close').addEventListener('click', function () {
+    input.value = '';
+    input.focus();
+    close();
+  });
   connect();
 
   function close () {
