@@ -12,9 +12,9 @@ body {
 
 a {
   color: #9c3493;
-  text-decoration: none;
 }
 
+a,
 a:active,
 a:hover,
 a:focus {

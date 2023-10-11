@@ -181,15 +181,14 @@
   padding: var(--tsmb-size-base);
 }
 
-.tsmb-foot {
+.tsmb-foot,
+.tsmb-foot:hover {
   display: block;
   text-align: right;
   font-size: var(--tsmb-size-sm);
   line-height: 18px;
   padding: var(--tsmb-size-half) var(--tsmb-size-sm);
   box-shadow: 0 0 10px rgba(0,0,0,0.12);
-}
-.tsmb-foot:hover {
   text-decoration: none;
 }
 .tsmb-foot::before {
