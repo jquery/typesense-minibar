@@ -57,6 +57,7 @@ main {
 
 .demo-custom-form {
   --tsmb-size-input: 2rem;
+  --tsmb-size-sm: 0.5rem;
   --tsmb-size-radius: 0px;
   width: 30rem;
 }
