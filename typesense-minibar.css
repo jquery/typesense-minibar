@@ -24,6 +24,7 @@
   position: relative;
   width: 20rem;
   max-width: 100%;
+  padding: 0;
   color: var(--tsmb-color-base30);
 }
 
