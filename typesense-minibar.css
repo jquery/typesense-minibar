@@ -29,6 +29,7 @@
 }
 
 .tsmb-form input[type=search] {
+  box-sizing: border-box;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
