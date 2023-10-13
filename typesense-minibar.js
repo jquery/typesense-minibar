@@ -1,4 +1,4 @@
-/*! https://github.com/jquery/typesense-minibar 1.1.0 */
+/*! https://github.com/jquery/typesense-minibar 1.1.1 */
 globalThis.tsminibar = function tsminibar (form) {
   const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
