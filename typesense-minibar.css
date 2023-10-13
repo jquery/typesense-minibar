@@ -5,8 +5,8 @@
   --tsmb-size-highlight: 2px;
   --tsmb-size-base: 1rem;
   --tsmb-size-sm: 0.8rem;
-  --tsmb-size-half: calc( var(--tsmb-size-sm) * 0.5 );
-  --tsmb-size-input: calc( var(--tsmb-size-base) * 1.2 );
+  --tsmb-size-half: calc(var(--tsmb-size-sm)/2);
+  --tsmb-size-input: calc(var(--tsmb-size-base) * 1.2);
 
   --tsmb-color-base-background: #fff;
   --tsmb-color-base30: #333;
@@ -76,9 +76,16 @@
   opacity: 0.5;
 }
 
+/* js only */
+.tsmb-form--open input[type=search],
+.tsmb-form--slash input[type=search] {
+  padding-right: calc(var(--tsmb-size-sm) + var(--tsmb-size-base) + var(--tsmb-size-base));
+}
+
 .tsmb-icon-close {
+  box-sizing: border-box;
   position: absolute;
-  top: calc(50% - var(--tsmb-size-base) / 2);
+  top: calc(50% - var(--tsmb-size-base)/2);
   right: var(--tsmb-size-base);
   width: var(--tsmb-size-base);
   height: var(--tsmb-size-base);
@@ -97,7 +104,7 @@
   content: '/';
   display: inline-block;
   position: absolute;
-  top: calc(50% - (var(--tsmb-size-input) + var(--tsmb-size-sm) / 2) / 2);
+  top: calc(50% - (var(--tsmb-size-input) + var(--tsmb-size-sm)/2)/2);
   right: var(--tsmb-size-sm);
   width: calc(var(--tsmb-size-input) + var(--tsmb-size-sm)/2);
   height: calc(var(--tsmb-size-input) + var(--tsmb-size-sm)/2);
@@ -106,6 +113,7 @@
   line-height: calc(var(--tsmb-size-input) + var(--tsmb-size-sm)/2);
   text-align: center;
 
+  background: var(--tsmb-color-base-background);
   border: var(--tsmb-size-edge) solid var(--tsmb-color-base90);
   border-radius: var(--tsmb-size-radius);
   color: var(--tsmb-color-base90);
