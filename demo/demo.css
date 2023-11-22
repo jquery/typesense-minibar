@@ -62,12 +62,8 @@ main {
 
 .demo-right-form {
   margin-left: auto;
+  --tsmb-size-listbox-right: 0;
 }
-
-.demo-right-form [role="listbox"] {
-  right: 0;
-}
-
 
 .demo-stylecontrol fieldset {
   background: #fff;
