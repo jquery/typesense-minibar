@@ -7,6 +7,10 @@
   --tsmb-size-sm: 0.8rem;
   --tsmb-size-half: calc(var(--tsmb-size-sm)/2);
   --tsmb-size-input: calc(var(--tsmb-size-base) * 1.2);
+  /* Set to 0 to make the listbox expand to the left */
+  --tsmb-size-listbox-right: auto;
+  --tsmb-size-listbox-width: calc(min(30rem, 60vw));
+  --tsmb-size-listbox-max-height: 70vh;
 
   --tsmb-color-base-background: #fff;
   --tsmb-color-base30: #333;
@@ -51,9 +55,11 @@
 .tsmb-form:focus-within {
   color: var(--tsmb-color-focus30);
 }
+
 .tsmb-form:focus-within input[type=search] {
   background: var(--tsmb-color-focus-background);
 }
+
 .tsmb-form:focus-within input[type=search]::placeholder {
   color: var(--tsmb-color-focus50);
 }
@@ -100,6 +106,10 @@
   display: block !important;
 }
 
+.tsmb-form--slash::after {
+  display: none;
+}
+
 .tsmb-form--slash:not(.tsmb-form--open):not(:focus-within)::after {
   content: '/';
   display: inline-block;
@@ -122,13 +132,16 @@
 .tsmb-form [role=listbox] {
   position: absolute;
   z-index: 10;
-
+  right: var(--tsmb-size-listbox-right);
   background: var(--tsmb-color-focus-background);
   color: var(--tsmb-color-focus30);
-  width: 100%;
-  max-height: 70vh;
+  margin-top: var(--tsmb-size-half);
+  min-width: 100%;
+  width: var(--tsmb-size-listbox-width);
+  max-height: var(--tsmb-size-listbox-max-height);
   overflow: auto;
   border: var(--tsmb-size-edge) solid var(--tsmb-color-focus90);
+  border-radius: var(--tsmb-size-radius);
   box-shadow: 0 var(--tsmb-size-sm) 20px rgba(0,0,0,0.12);
 }
 
@@ -143,9 +156,11 @@
   text-decoration: none;
   border-left: var(--tsmb-size-highlight) solid transparent;
 }
+
 .tsmb-form:not([data-group=true]) [role=option]:not(:first-child) a {
   border-top: var(--tsmb-size-edge) solid var(--tsmb-color-focus90);
 }
+
 .tsmb-form[data-group=true] [role=option] a {
   margin: 0 var(--tsmb-size-base);
   padding: var(--tsmb-size-sm);
@@ -199,33 +214,13 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.12);
   text-decoration: none;
 }
+
 .tsmb-foot::before {
   content: 'Search by';
   color: var(--tsmb-color-focus50);
 }
+
 .tsmb-foot::after {
   content: ' Typesense';
   color: #0300b0;
-}
-
-@media (max-width: 480px) {
-  .tsmb-form {
-    width: 100%;
-  }
-
-  .tsmb-form input[type=search] {
-    border-radius: 0;
-  }
-}
-
-@media (min-width: 768px) {
-  .tsmb-form [role=listbox] {
-    border-radius: var(--tsmb-size-radius);
-    min-width: 500px;
-    margin-top: var(--tsmb-size-half);
-  }
-
-  .tsmb-form--slash::after {
-    display: none;
-  }
 }

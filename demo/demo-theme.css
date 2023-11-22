@@ -17,19 +17,19 @@ header > * {
   align-self: center;
 }
 
-header h2 {
-  order: 1;
-}
-
 .demo-logo {
   background-image: url(../assets/logo-text-dark.svg);
 }
 
 header .tsmb-form {
+  width: 30em;
+  margin-left: auto;
   --tsmb-color-base-background: #691c69;
   --tsmb-color-base30: var(--tsmb-color-primary90);
   --tsmb-color-base50: #c090c0;
   --tsmb-color-base90: #c090c0;
+  --tsmb-size-listbox-right: 0;
+  --tsmb-size-listbox-width: calc(min(50rem, 80vw));
 }
 header .tsmb-form:not(:focus-within)::before {
   filter: invert();
