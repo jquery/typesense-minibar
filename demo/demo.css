@@ -36,7 +36,7 @@ main,
 
   height: 2.3rem;
   width: 9.2rem;
-  
+
   background: url(../assets/logo-text.svg) left center no-repeat;
   background-size: contain;
   text-indent: -9999px;
@@ -58,6 +58,11 @@ main {
   --tsmb-size-sm: 0.5rem;
   --tsmb-size-radius: 0px;
   width: 30rem;
+}
+
+.demo-right-form {
+  margin-left: auto;
+  --tsmb-size-listbox-right: 0;
 }
 
 .demo-stylecontrol fieldset {
