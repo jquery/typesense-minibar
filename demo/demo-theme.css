@@ -17,10 +17,6 @@ header > * {
   align-self: center;
 }
 
-header h2 {
-  order: 1;
-}
-
 .demo-logo {
   background-image: url(../assets/logo-text-dark.svg);
 }
