@@ -7,7 +7,6 @@
   --tsmb-size-sm: 0.8rem;
   --tsmb-size-half: calc(var(--tsmb-size-sm)/2);
   --tsmb-size-input: calc(var(--tsmb-size-base) * 1.2);
-  /* Set to 0 to make the listbox expand to the left */
   --tsmb-size-listbox-right: auto;
   --tsmb-size-listbox-width: calc(min(30rem, 60vw));
   --tsmb-size-listbox-max-height: 70vh;
