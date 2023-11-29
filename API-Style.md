@@ -25,6 +25,9 @@ Misc sizes:
 * `--tsmb-size-edge`: Line thickness of edges, e.g. border-width.
 * `--tsmb-size-radius`: Roundness, e.g. border-radius.
 * `--tsmb-size-highlight`: Line thickness of cursor highlight, e.g. border-left-width.
+* `--tsmb-size-listbox-width`: The maximum width of the listbox. The minimum is the width of the input field.
+* `--tsmb-size-listbox-max-height`: The maximum height of the listbox.
+* `--tsmb-size-listbox-right`: Set to `0` to create a right-aligned listbox that expands to the left.
 
 Base layout, for idle or inactive input field:
 * `--tsmb-color-base-background`: Background color, e.g. white in lightmode.
@@ -34,12 +37,12 @@ Base layout, for idle or inactive input field:
 
 Active layout, for active input field and result box. Defaults to the same colors as above.
 * `--tsmb-color-focus-background`: Background color, e.g. white in lightmode.
-* `--tsmb-color-focus30`: Hard contrast (focussed input text). 
-* `--tsmb-color-focus50`: Medium contrast (for search result excerpt, focussed placeholder, footer). 
+* `--tsmb-color-focus30`: Hard contrast (focussed input text).
+* `--tsmb-color-focus50`: Medium contrast (for search result excerpt, focussed placeholder, footer).
 * `--tsmb-color-focus90`: Subtle contrast (for result borders).
 
 Primary colors, by default only used in the active layout:
-* `--tsmb-color-primary30`: Hard contrast, for colorful dark background or dark text. 
+* `--tsmb-color-primary30`: Hard contrast, for colorful dark background or dark text.
 * `--tsmb-color-primary50`: Medium contrast, for colorful links or buttons.
 * `--tsmb-color-primary90`: Subtle contrast, for selection background.
 
