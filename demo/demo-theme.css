@@ -22,10 +22,12 @@ header > * {
 }
 
 header .tsmb-form {
+  width: 30em;
   --tsmb-color-base-background: #691c69;
   --tsmb-color-base30: var(--tsmb-color-primary90);
   --tsmb-color-base50: #c090c0;
   --tsmb-color-base90: #c090c0;
+  --tsmb-size-listbox-width: calc(min(50rem, 80vw));
 }
 header .tsmb-form:not(:focus-within)::before {
   filter: invert();
