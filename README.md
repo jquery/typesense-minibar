@@ -41,8 +41,8 @@
 
 Distribution:
 
-* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.1.1/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.1.1/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.1.1/typesense-minibar.css)
-* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.1.1/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.1.1/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.1.1/typesense-minibar.css)
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.2.0/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.2.0/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.2.0/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.2.0/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.2.0/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.2.0/typesense-minibar.css)
 * npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
   ```shell
   npm i --save typesense-minibar
