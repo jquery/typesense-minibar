@@ -15,18 +15,13 @@ concurrency:
 
 jobs:
   deploy:
+    # Includes firefox, chromium, and Node.js 18.
+    # https://github.com/actions/runner-images/blob/ubuntu22/20240403.1/images/ubuntu/Ubuntu2204-Readme.md
     runs-on: ubuntu-22.04
     env:
       FORCE_COLOR: "1"
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - uses: actions/setup-node@v3.5.0
-        with:
-          node-version: 18.x
+      - uses: actions/checkout@v4
       - run: npm install
 
       - name: Generate coverage
