@@ -432,13 +432,35 @@ QUnit.module('typesense-minibar', hooks => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
     document.body.append(form);
-    assert.true(!document.activeElement || !form.contains(document.activeElement), 'initial focus');
+    assert.false(form.contains(document.activeElement || null), 'initial focus');
 
     bar = tsminibar(form);
-    assert.true(!document.activeElement || !form.contains(document.activeElement), 'focus after contruct');
+    assert.false(form.contains(document.activeElement || null), 'focus after contruct');
 
     simulate(document, 'keydown', {}, { key: '/' });
     assert.strictEqual(document.activeElement, input, 'focus after slash');
+  });
+
+  QUnit.test('focus [re-open results]', async assert => {
+    const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    document.body.append(form);
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox hidden');
+
+    input.focus();
+    assert.false(listbox.hidden, 'listbox re-opened');
   });
 
   QUnit.test('focus [preconnect]', async assert => {

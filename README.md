@@ -3,12 +3,12 @@
 <div align="center">
 
 [![Continuous integration](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml/badge.svg)](https://github.com/jquery/typesense-minibar/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
-[![Test coverage](https://img.shields.io/badge/coverage-93%25-brightgreen.svg)](https://jquery.github.io/typesense-minibar/coverage/)
+[![Test coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](https://jquery.github.io/typesense-minibar/coverage/)
 [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 </div>
 
-**minibar** is a fast 2kB autocomplete search bar for [Typesense](https://typesense.org/). It is an alternative to typesense-docsearch.js, Algolia DocSearch, InstantSearch, autocomplete-js, and typesense-js.
+**minibar** is a fast 2kB autocomplete search bar for [Typesense](https://typesense.org/). It is an alternative to Algolia DocSearch, InstantSearch, autocomplete-js, typesense-docsearch.js, and typesense-js.
 
 ## Features
 
