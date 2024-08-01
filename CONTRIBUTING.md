@@ -1,9 +1,5 @@
 # Contribute to typesense-minibar
 
-## How it works
-
-* Cut the mustard using `type="module"`.
-
 ## Internal API
 
 ```js

@@ -19,6 +19,7 @@
 * **Accessible**, keyboard navigation, arrow keys, close on `Esc` or outside click
 * **Fast**, leverages preconnect (Resource Hints), LRU memory cache
 * **Easy to install**, fully declarative via HTML (zero-code setup!)
+* **Web Component** ready
 
 ## Getting started
 
@@ -48,11 +49,29 @@ Distribution:
   npm i --save typesense-minibar
   ```
   ```js
+  // CommonJS
   require('typesense-minibar');
+  // ESM
   import 'typesense-minibar';
   ```
 
 ## API
+
+### Web Component
+
+`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`.
+
+```html
+<typesense-minibar>
+  <form role="search" action="https://duckduckgo.com"
+      data-origin=""
+      data-collection=""
+      data-key="">
+    <input type="search" name="q" placeholder="Search..." autocomplete="off">
+    <input type="hidden" name="sites" value="example.org">
+  </form>
+</typesense-minibar>
+```
 
 ### Configuration
 
@@ -125,7 +144,7 @@ Refer to [Style API](./API-Style.md) for the CSS variable names and selectors.
 
 | typesense-minibar | typesense-server | typesense-docsearch-scraper
 |--|--|--
-| 1.0.x | >= 0.24 | 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" -->
+| 1.0.x | >= 0.24 | >= 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" --> (Tested upto: 0.9.1)
 
 ### Browser support
 
@@ -165,6 +184,25 @@ Notes:
 * [Google Chrome requires Android 7.0 and macOS 10.13](https://support.google.com/chrome/a/answer/7100626?hl=en)
 * [Firefox 48 last to support OS X 10.6-10.8](https://www.mozilla.org/en-US/firefox/48.0/releasenotes/)
 * [Firefox 78 last to support OS X 10.9-10.11](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/)
+
+## FAQ: Troubleshooting
+
+* Why is the form not interactive if I insert it later?
+
+  If you create or insert the element dynamically with JavaScript, it is recommended to write the form as a web component instead, like so:
+  ```html
+  <typescript-minibar>
+    <form ..>..</form>
+  </typescript-minibar>
+  ```
+
+  Web components automatically activate the relevant JavaScript, no matter when they are inserted on the page.
+
+  By default, typescript-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
+
+* How does this prevent JavaScript errors in older browsers? What about ES5?
+
+  If you load typesense-minibar.js standalone, make sure you have the `type="module"` attribute on the `<script>` tag. Scripts with this type are naturally ignored by older browsers. The element works fine **without JavaScript**, following the principles of [progressive enhancement](https://en.wikipedia.org/wiki/Progressive_enhancement). This technique is analogous to "[cutting the mustard](https://responsivenews.tumblr.com/post/18948466399/cutting-the-mustard)".
 
 ## Feedback
 

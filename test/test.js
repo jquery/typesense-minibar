@@ -363,6 +363,47 @@ QUnit.module('typesense-minibar', hooks => {
     assert.false(listbox.hidden, 'listbox re-opened');
   });
 
+  QUnit.test('listbox [no stale result leak on refocus]', async assert => {
+    const form = parseHTML('<form><input type="search"></form>');
+    const input = form.firstChild;
+    bar = tsminibar(form);
+    const listbox = form.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+    assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
+
+    // When backspacing and making the input empty, we hide the listbox.
+    // Given that empty string isn't a valid query, this means no results
+    // are rendered. If we later re-focus the input field, we should not leak
+    // results from the last query (i.e. before the last backspace), as those
+    // are now unrelated.
+    mockFetchResponse = null;
+    input.value = '';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.true(listbox.hidden, 'listbox hidden');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox remains hidden (document)');
+
+    simulate(input, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox remains hidden (refocus)');
+    // It would be fine if render() was more lazy and left innerHTML populated
+    // when rendering a close() that sets `state.open = false`. It only matters
+    // that state.hits is cleared and that any future render() call will not make
+    // the element visible, unless it also replaces innerHTML then.
+    // But.. for simplicity, right now, we do clear the HTML unconditonally,
+    // so let's assert that, and detect potentially unintended changes in the future.
+    assert.equal(listbox.querySelector('mark')?.textContent, null, 'stale snippet gone');
+  });
+
   QUnit.test('listbox [arrow key cursor]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
@@ -428,6 +469,19 @@ QUnit.module('typesense-minibar', hooks => {
     );
   });
 
+  QUnit.test('focus [data-slash=false]', async assert => {
+    const form = parseHTML('<form data-slash="false"><input type="search"></form>');
+    document.body.append(form);
+    assert.false(form.contains(document.activeElement || null), 'initial focus');
+
+    bar = tsminibar(form);
+    assert.false(form.contains(document.activeElement || null), 'focus after contruct');
+
+    // should be ignored when data-slash=false
+    simulate(document, 'keydown', {}, { key: '/' });
+    assert.false(form.contains(document.activeElement || null), 'focus after slash');
+  });
+
   QUnit.test('focus [slash]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
@@ -475,5 +529,30 @@ QUnit.module('typesense-minibar', hooks => {
     assert.strictEqual(document.activeElement, input, 'focus after slash');
     await new Promise(resolve => setTimeout(resolve));
     assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 1, 'preconnect link');
+  });
+
+  QUnit.test('Web Component [input, listbox, re-focus]', async assert => {
+    const element = parseHTML('<typesense-minibar><form><input type="search"></form></typesense-minibar>');
+    document.querySelector('#qunit-fixture').append(element);
+    const form = element.querySelector('form');
+    assert.equal(form.className, 'tsmb-form tsmb-form--slash', 'set form class');
+
+    const input = form.firstChild;
+    const listbox = element.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+    assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox hidden');
+
+    input.focus();
+    assert.false(listbox.hidden, 'listbox re-opened');
   });
 });
