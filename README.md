@@ -191,14 +191,14 @@ Notes:
 
   If you create or insert the element dynamically with JavaScript, it is recommended to write the form as a web component instead, like so:
   ```html
-  <typescript-minibar>
+  <typesense-minibar>
     <form ..>..</form>
-  </typescript-minibar>
+  </typesense-minibar>
   ```
 
   Web components automatically activate the relevant JavaScript, no matter when they are inserted on the page.
 
-  By default, typescript-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
+  By default, typesense-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
 
 * How does this prevent JavaScript errors in older browsers? What about ES5?
 

@@ -535,7 +535,7 @@ QUnit.module('typesense-minibar', hooks => {
     const element = parseHTML('<typesense-minibar><form><input type="search"></form></typesense-minibar>');
     document.querySelector('#qunit-fixture').append(element);
     const form = element.querySelector('form');
-    assert.equal(form.className, 'tsmb-form tsmb-form--slash', 'set form class');
+    assert.equal(form.className, 'tsmb-form--slash', 'set form class');
 
     const input = form.firstChild;
     const listbox = element.querySelector('[role=listbox]');

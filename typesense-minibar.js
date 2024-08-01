@@ -92,7 +92,6 @@ globalThis.tsminibar = function tsminibar (form) {
 
   function connect () {
     document.addEventListener('click', onDocClick);
-    form.classList.add('tsmb-form');
     if (form.dataset.slash !== 'false') {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
