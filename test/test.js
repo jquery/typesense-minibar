@@ -469,6 +469,19 @@ QUnit.module('typesense-minibar', hooks => {
     );
   });
 
+  QUnit.test('focus [data-slash=false]', async assert => {
+    const form = parseHTML('<form data-slash="false"><input type="search"></form>');
+    document.body.append(form);
+    assert.false(form.contains(document.activeElement || null), 'initial focus');
+
+    bar = tsminibar(form);
+    assert.false(form.contains(document.activeElement || null), 'focus after contruct');
+
+    // should be ignored when data-slash=false
+    simulate(document, 'keydown', {}, { key: '/' });
+    assert.false(form.contains(document.activeElement || null), 'focus after slash');
+  });
+
   QUnit.test('focus [slash]', async assert => {
     const form = parseHTML('<form><input type="search"></form>');
     const input = form.firstChild;
