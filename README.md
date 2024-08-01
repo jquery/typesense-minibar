@@ -26,13 +26,12 @@
 **[Demo](https://jquery.github.io/typesense-minibar/demo/)**
 
 ```html
-<form role="search" class="tsmb-form" action="https://duckduckgo.com"
-      data-origin=""
-      data-collection=""
-      data-key="">
-  <input type="search" name="q" placeholder="Search..." autocomplete="off">
-  <input type="hidden" name="sites" value="example.org">
-</form>
+<typesense-minibar data-origin="" data-collection="" data-key="">
+  <form role="search" action="https://duckduckgo.com">
+    <input type="search" name="q" placeholder="Search..." autocomplete="off">
+    <input type="hidden" name="sites" value="example.org">
+  </form>
+</typesense-minibar>
 ```
 
 ```html
@@ -42,8 +41,8 @@
 
 Distribution:
 
-* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/typesense-minibar.css)
-* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.1/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.1/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.1/typesense-minibar.css)
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.2/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.2/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.2/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.2/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.2/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.2/typesense-minibar.css)
 * npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
   ```shell
   npm i --save typesense-minibar
@@ -57,23 +56,36 @@ Distribution:
 
 ## API
 
-### Web Component
+### Markup
 
-`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`.
+As HTML custom element (aka Web Component):
 
 ```html
-<typesense-minibar>
-  <form role="search" action="https://duckduckgo.com"
-      data-origin=""
-      data-collection=""
-      data-key="">
+<typesense-minibar data-origin="" data-collection="" data-key="">
+  <form role="search" action="https://duckduckgo.com">
     <input type="search" name="q" placeholder="Search..." autocomplete="off">
     <input type="hidden" name="sites" value="example.org">
   </form>
 </typesense-minibar>
 ```
 
+`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`,
+which you can also use directly:
+
+```html
+<form role="search" action="https://duckduckgo.com" class="tsmb-form"
+    data-origin=""
+    data-collection=""
+    data-key=""
+>
+  <input type="search" name="q" placeholder="Search..." autocomplete="off">
+  <input type="hidden" name="sites" value="example.org">
+</form>
+```
+
 ### Configuration
+
+Set these attributes on `<typesense-minibar>` or `<form class="tsmb-form">`:
 
 * ***data-origin*** (Required): Base URL to your Typesense server.
 

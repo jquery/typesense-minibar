@@ -532,7 +532,7 @@ QUnit.module('typesense-minibar', hooks => {
   });
 
   QUnit.test('Web Component [input, listbox, re-focus]', async assert => {
-    const element = parseHTML('<typesense-minibar><form><input type="search"></form></typesense-minibar>');
+    const element = parseHTML('<typesense-minibar data-origin="x"><form><input type="search"></form></typesense-minibar>');
     document.querySelector('#qunit-fixture').append(element);
     const form = element.querySelector('form');
     assert.equal(form.className, 'tsmb-form--slash', 'set form class');
@@ -554,5 +554,20 @@ QUnit.module('typesense-minibar', hooks => {
 
     input.focus();
     assert.false(listbox.hidden, 'listbox re-opened');
+  });
+
+  QUnit.test('Web Component [data-slash=false]', async assert => {
+    const element = parseHTML('<typesense-minibar data-origin="x" data-slash="false"><form><input type="search"></form></typesense-minibar>');
+    document.querySelector('#qunit-fixture').append(element);
+    const form = element.querySelector('form');
+    assert.equal(form.className, '', 'form class unchanged');
+    assert.false(form.contains(document.activeElement || null), 'focus after contruct');
+
+    // should be ignored when data-slash=false
+    simulate(document, 'keydown', {}, { key: '/' });
+    assert.false(form.contains(document.activeElement || null), 'focus after slash');
+
+    await new Promise(resolve => setTimeout(resolve));
+    assert.false(form.contains(document.activeElement || null), 'focus after slash and timeout');
   });
 });
