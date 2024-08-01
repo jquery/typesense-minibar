@@ -42,8 +42,8 @@
 
 Distribution:
 
-* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.0/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.0/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.0/typesense-minibar.css)
-* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.0/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.0/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.0/typesense-minibar.css)
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.1/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.1/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.1/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.1/typesense-minibar.css)
 * npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
   ```shell
   npm i --save typesense-minibar
@@ -191,14 +191,14 @@ Notes:
 
   If you create or insert the element dynamically with JavaScript, it is recommended to write the form as a web component instead, like so:
   ```html
-  <typescript-minibar>
+  <typesense-minibar>
     <form ..>..</form>
-  </typescript-minibar>
+  </typesense-minibar>
   ```
 
   Web components automatically activate the relevant JavaScript, no matter when they are inserted on the page.
 
-  By default, typescript-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
+  By default, typesense-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
 
 * How does this prevent JavaScript errors in older browsers? What about ES5?
 

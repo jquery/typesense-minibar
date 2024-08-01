@@ -1,4 +1,4 @@
-/*! https://github.com/jquery/typesense-minibar 1.3.0 */
+/*! https://github.com/jquery/typesense-minibar 1.3.1 */
 globalThis.tsminibar = function tsminibar (form) {
   const { origin, collection } = form.dataset;
   const group = !!form.dataset.group;
@@ -92,7 +92,6 @@ globalThis.tsminibar = function tsminibar (form) {
 
   function connect () {
     document.addEventListener('click', onDocClick);
-    form.classList.add('tsmb-form');
     if (form.dataset.slash !== 'false') {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');

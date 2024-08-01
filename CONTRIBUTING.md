@@ -1,5 +1,16 @@
 # Contribute to typesense-minibar
 
+## Implementation notes
+
+* The styles for `typesense-minibar` as web component, and `.tsmb-form` class name are kept independent (that is, the web component does not auto-add the class name).
+
+  This is done for two reasons:
+
+  1. Avoid selector conflict for Style API.
+     If we were to add `class="tsmb-form"` in the web component, it would mean `typesense-minibar form` and `.tsmb-form` both match. This makes the `typesense-minibar form` selector impsosible to override in CSS for downstream users, because our defaults for `.tsmb-form` (weight 0010) would continue to "win" the cascade, as being a stronger selector than `typesense-minibar form` (weight 0002).
+  2. Avoid a FOUC.
+     The element should render identically and without reflows both before and after JavaScript loads. During local development it's easy to miss a FOUC if it fixes itself once JavaScript loads. By not auto-correcting these, the bugs are more obvious and we fix them.
+
 ## Internal API
 
 ```js

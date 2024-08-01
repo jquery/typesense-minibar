@@ -1,4 +1,4 @@
-/*! https://github.com/jquery/typesense-minibar 1.3.0 */
+/*! https://github.com/jquery/typesense-minibar 1.3.1 */
 .tsmb-form,
 typesense-minibar {
   --tsmb-size-edge: 1px;
@@ -142,7 +142,8 @@ typesense-minibar form::before {
   color: var(--tsmb-color-base90);
 }
 
-.tsmb-form [role=listbox] {
+.tsmb-form [role=listbox],
+typesense-minibar [role=listbox] {
   position: absolute;
   z-index: 10;
   right: var(--tsmb-size-listbox-right);
@@ -163,29 +164,35 @@ typesense-minibar form::before {
   border-bottom: var(--tsmb-size-edge) solid var(--tsmb-color-focus90);
 }
 
-.tsmb-form [role=option] a {
+.tsmb-form [role=option] a,
+typesense-minibar [role=option] a {
   display: block;
   padding: var(--tsmb-size-base);
   text-decoration: none;
   border-left: var(--tsmb-size-highlight) solid transparent;
 }
 
-.tsmb-form:not([data-group=true]) [role=option]:not(:first-child) a {
+.tsmb-form:not([data-group=true]) [role=option]:not(:first-child) a,
+typesense-minibar form:not([data-group=true]) [role=option]:not(:first-child) a {
   border-top: var(--tsmb-size-edge) solid var(--tsmb-color-focus90);
 }
 
-.tsmb-form[data-group=true] [role=option] a {
+.tsmb-form[data-group=true] [role=option] a,
+typesense-minibar form[data-group=true] [role=option] a {
   margin: 0 var(--tsmb-size-base);
   padding: var(--tsmb-size-sm);
 }
 
 .tsmb-form [role=option] a:hover,
-.tsmb-form [role=option][aria-selected=true] a {
+.tsmb-form [role=option][aria-selected=true] a,
+typesense-minibar [role=option] a:hover,
+typesense-minibar [role=option][aria-selected=true] a {
   background: var(--tsmb-color-primary90);
   border-left-color: var(--tsmb-color-primary50);
 }
 
-.tsmb-form [role=option] mark {
+.tsmb-form [role=option] mark,
+typesense-minibar [role=option] mark {
   background: none;
   color: inherit;
   font-style: normal;
