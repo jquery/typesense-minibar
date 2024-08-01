@@ -26,13 +26,12 @@
 **[Demo](https://jquery.github.io/typesense-minibar/demo/)**
 
 ```html
-<form role="search" class="tsmb-form" action="https://duckduckgo.com"
-      data-origin=""
-      data-collection=""
-      data-key="">
-  <input type="search" name="q" placeholder="Search..." autocomplete="off">
-  <input type="hidden" name="sites" value="example.org">
-</form>
+<typesense-minibar data-origin="" data-collection="" data-key="">
+  <form role="search" action="https://duckduckgo.com">
+    <input type="search" name="q" placeholder="Search..." autocomplete="off">
+    <input type="hidden" name="sites" value="example.org">
+  </form>
+</typesense-minibar>
 ```
 
 ```html
@@ -57,23 +56,36 @@ Distribution:
 
 ## API
 
-### Web Component
+### Markup
 
-`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`.
+As HTML custom element (aka Web Component):
 
 ```html
-<typesense-minibar>
-  <form role="search" action="https://duckduckgo.com"
-      data-origin=""
-      data-collection=""
-      data-key="">
+<typesense-minibar data-origin="" data-collection="" data-key="">
+  <form role="search" action="https://duckduckgo.com">
     <input type="search" name="q" placeholder="Search..." autocomplete="off">
     <input type="hidden" name="sites" value="example.org">
   </form>
 </typesense-minibar>
 ```
 
+`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`,
+which you can also use directly:
+
+```html
+<form role="search" action="https://duckduckgo.com" class="tsmb-form"
+    data-origin=""
+    data-collection=""
+    data-key=""
+>
+  <input type="search" name="q" placeholder="Search..." autocomplete="off">
+  <input type="hidden" name="sites" value="example.org">
+</form>
+```
+
 ### Configuration
+
+Set these attributes on `<typesense-minibar>` or `<form class="tsmb-form">`:
 
 * ***data-origin*** (Required): Base URL to your Typesense server.
 

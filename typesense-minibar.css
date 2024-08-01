@@ -173,12 +173,12 @@ typesense-minibar [role=option] a {
 }
 
 .tsmb-form:not([data-group=true]) [role=option]:not(:first-child) a,
-typesense-minibar form:not([data-group=true]) [role=option]:not(:first-child) a {
+typesense-minibar:not([data-group=true]) [role=option]:not(:first-child) a {
   border-top: var(--tsmb-size-edge) solid var(--tsmb-color-focus90);
 }
 
 .tsmb-form[data-group=true] [role=option] a,
-typesense-minibar form[data-group=true] [role=option] a {
+typesense-minibar[data-group=true] [role=option] a {
   margin: 0 var(--tsmb-size-base);
   padding: var(--tsmb-size-sm);
 }
@@ -210,7 +210,8 @@ typesense-minibar [role=option] mark {
 .tsmb-suggestion_title {
   color: var(--tsmb-color-primary30);
 }
-.tsmb-form[data-group=true] .tsmb-suggestion_title {
+.tsmb-form[data-group=true] .tsmb-suggestion_title,
+typesense-minibar[data-group=true] .tsmb-suggestion_title {
   font-weight: bold;
   font-size: var(--tsmb-size-sm);
 }
