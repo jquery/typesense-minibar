@@ -37,7 +37,7 @@ Open <http://localhost:4100/demo/>
 export MINIBAR_VERSION=x.y.z
 ```
 ```sh
-sed -i'.bak' "s/typesense-minibar [0-9\.]*/typesense-minibar $MINIBAR_VERSION/" typesense-minibar* && \
+sed -i'.bak' "1s/typesense-minibar [0-9\.]*/typesense-minibar $MINIBAR_VERSION/" typesense-minibar* && \
 sed -i'.bak' "s/minibar@[^/]*/minibar@$MINIBAR_VERSION/g" README.md && \
 sed -i'.bak' 's/"version": "[^"]*"/"version": "'$MINIBAR_VERSION'"/' package.json && \
 rm *.bak
