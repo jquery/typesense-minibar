@@ -530,4 +530,29 @@ QUnit.module('typesense-minibar', hooks => {
     await new Promise(resolve => setTimeout(resolve));
     assert.strictEqual(document.head.querySelectorAll('link[rel=preconnect]').length, 1, 'preconnect link');
   });
+
+  QUnit.test('Web Component [input, listbox, re-focus]', async assert => {
+    const element = parseHTML('<typesense-minibar><form><input type="search"></form></typesense-minibar>');
+    document.querySelector('#qunit-fixture').append(element);
+    const form = element.querySelector('form');
+    assert.equal(form.className, 'tsmb-form tsmb-form--slash', 'set form class');
+
+    const input = form.firstChild;
+    const listbox = element.querySelector('[role=listbox]');
+
+    mockFetchResponse = API_RESP_FULL_MATCH_SOMETHING;
+    input.value = 'something';
+    await expectRender(form, () => {
+      simulate(input, 'input');
+    });
+    assert.false(listbox.hidden, 'listbox not hidden');
+    assert.equal(listbox.querySelector('mark').outerHTML, '<mark>something</mark>', 'snippet');
+
+    mockFetchResponse = null;
+    simulate(document.body, 'click', { bubbles: true });
+    assert.true(listbox.hidden, 'listbox hidden');
+
+    input.focus();
+    assert.false(listbox.hidden, 'listbox re-opened');
+  });
 });

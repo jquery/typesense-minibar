@@ -19,6 +19,7 @@
 * **Accessible**, keyboard navigation, arrow keys, close on `Esc` or outside click
 * **Fast**, leverages preconnect (Resource Hints), LRU memory cache
 * **Easy to install**, fully declarative via HTML (zero-code setup!)
+* **Web Component** ready
 
 ## Getting started
 
@@ -48,11 +49,29 @@ Distribution:
   npm i --save typesense-minibar
   ```
   ```js
+  // CommonJS
   require('typesense-minibar');
+  // ESM
   import 'typesense-minibar';
   ```
 
 ## API
+
+### Web Component
+
+`<typesense-minibar><form>…</form></typesense-minibar>` is equivalent to `<form class="tsmb-form">`.
+
+```html
+<typesense-minibar>
+  <form role="search" action="https://duckduckgo.com"
+      data-origin=""
+      data-collection=""
+      data-key="">
+    <input type="search" name="q" placeholder="Search..." autocomplete="off">
+    <input type="hidden" name="sites" value="example.org">
+  </form>
+</typesense-minibar>
+```
 
 ### Configuration
 
@@ -167,6 +186,19 @@ Notes:
 * [Firefox 78 last to support OS X 10.9-10.11](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/)
 
 ## FAQ: Troubleshooting
+
+* Why is the form not interactive if I insert it later?
+
+  If you create or insert the element dynamically with JavaScript, it is recommended to write the form as a web component instead, like so:
+  ```html
+  <typescript-minibar>
+    <form ..>..</form>
+  </typescript-minibar>
+  ```
+
+  Web components automatically activate the relevant JavaScript, no matter when they are inserted on the page.
+
+  By default, typescript-minibar.js also makes sure that any `<form class="tsmb-form">` elements on the page are hydrated and activated. This should catch any static element on the page (i.e. before "document ready", or the DOMContentLoaded event). This works internally by levering the fact that script execution is naturally deferred until the document is ready, via the `defer` and `type="module"` attributes on the `<script>` tag.
 
 * How does this prevent JavaScript errors in older browsers? What about ES5?
 

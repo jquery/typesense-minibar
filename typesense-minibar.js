@@ -92,6 +92,7 @@ globalThis.tsminibar = function tsminibar (form) {
 
   function connect () {
     document.addEventListener('click', onDocClick);
+    form.classList.add('tsmb-form');
     if (form.dataset.slash !== 'false') {
       document.addEventListener('keydown', onDocSlash);
       form.classList.add('tsmb-form--slash');
@@ -164,4 +165,10 @@ globalThis.tsminibar = function tsminibar (form) {
 
   return { form, connect, disconnect };
 };
-document.querySelectorAll('.tsmb-form[data-origin]').forEach(form => tsminibar(form));
+document.querySelectorAll('.tsmb-form[data-origin]').forEach(tsminibar);
+window.customElements.define('typesense-minibar', class extends HTMLElement {
+  connectedCallback () {
+    const form = this.querySelector('form');
+    if (form) tsminibar(form);
+  }
+});
