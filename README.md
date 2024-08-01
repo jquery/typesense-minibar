@@ -125,7 +125,7 @@ Refer to [Style API](./API-Style.md) for the CSS variable names and selectors.
 
 | typesense-minibar | typesense-server | typesense-docsearch-scraper
 |--|--|--
-| 1.0.x | >= 0.24 | 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" -->
+| 1.0.x | >= 0.24 | >= 0.6.0.rc1 <!-- adds "group_by=url_without_anchor" --> (Tested upto: 0.9.1)
 
 ### Browser support
 
@@ -165,6 +165,12 @@ Notes:
 * [Google Chrome requires Android 7.0 and macOS 10.13](https://support.google.com/chrome/a/answer/7100626?hl=en)
 * [Firefox 48 last to support OS X 10.6-10.8](https://www.mozilla.org/en-US/firefox/48.0/releasenotes/)
 * [Firefox 78 last to support OS X 10.9-10.11](https://www.mozilla.org/en-US/firefox/78.0/releasenotes/)
+
+## FAQ: Troubleshooting
+
+* How does this prevent JavaScript errors in older browsers? What about ES5?
+
+  If you load typesense-minibar.js standalone, make sure you have the `type="module"` attribute on the `<script>` tag. Scripts with this type are naturally ignored by older browsers. The element works fine **without JavaScript**, following the principles of [progressive enhancement](https://en.wikipedia.org/wiki/Progressive_enhancement). This technique is analogous to "[cutting the mustard](https://responsivenews.tumblr.com/post/18948466399/cutting-the-mustard)".
 
 ## Feedback
 
