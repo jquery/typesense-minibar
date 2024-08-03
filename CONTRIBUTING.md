@@ -2,7 +2,17 @@
 
 ## Implementation notes
 
-* The styles for `typesense-minibar` as web component, and `.tsmb-form` class name are kept independent (that is, the web component does not auto-add the class name).
+* The `cache` Map lets us instantly display any previous result in the same browser tab. We follow the [LRU strategy](https://en.wikipedia.org/wiki/Least_recently_used).
+
+  For example, if you type `a`, `app`, `apple`, `apples`, and backspace to a shorter previous query, we instantly show those previous results. (No time wasted waiting for re-download of the same results. It also saves client bandwidth and server load.) Or, if you think another word might yield better results and replace it with `banana`, and return to `apple` because that had a better one, we respond instantly.
+
+  We keep up to 100 past results in memory. After that, we prioritize keeping the most recently shown data, and delete older unused results. We assume that you're most likely to return to what you've seen most recently. (Maybe not within the last 10, but within 100. Even if you do return to the very first after a hundred, you're likely to pass by more recent ones on the way there. All queries have equal cost.) When we store a new result, or when we re-use an old result, we delete it and re-set it, so that it goes to the "bottom" of the map.
+
+  When it is time to delete an old result, we take a key from the "top" of the map, which is either the oldest and never used, or the least recently used.
+
+  If we only add new results and reuse results as-is ([FIFO strategy](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics))), that may delete very recently used data.
+
+* The styles for `typesense-minibar` as web component, and `.tsmb-form` class name are kept independent (that is, the web component does not auto-add the class name, nor does it otherwise rely on styles for the class name, and vice versa).
 
   This is done for two reasons:
 
