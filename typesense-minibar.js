@@ -117,7 +117,7 @@ globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
     let hits = cache.get(query);
     if (hits) {
       cache.delete(query);
-      cache.set(query, hits); // LRU
+      cache.set(query, hits);
       return hits;
     }
     searchParams.set('q', query);
