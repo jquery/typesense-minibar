@@ -2,24 +2,73 @@
 
 ## Implementation notes
 
-* The `cache` Map lets us instantly display any previous result in the same browser tab. We follow the [LRU strategy](https://en.wikipedia.org/wiki/Least_recently_used).
+### Group by url_without_anchor
 
-  For example, if you type `a`, `app`, `apple`, `apples`, and backspace to a shorter previous query, we instantly show those previous results. (No time wasted waiting for re-download of the same results. It also saves client bandwidth and server load.) Or, if you think another word might yield better results and replace it with `banana`, and return to `apple` because that had a better one, we respond instantly.
+One of the ways in which minibar provides different (and arguably, better) default settings compared to DocSearch.js, is the removal of duplicate results from the same page.
 
-  We keep up to 100 past results in memory. After that, we prioritize keeping the most recently shown data, and delete older unused results. We assume that you're most likely to return to what you've seen most recently. (Maybe not within the last 10, but within 100. Even if you do return to the very first after a hundred, you're likely to pass by more recent ones on the way there. All queries have equal cost.) When we store a new result, or when we re-use an old result, we delete it and re-set it, so that it goes to the "bottom" of the map.
+- [Demo: typesense-minibar](https://jquery.github.io/typesense-minibar/)
+- [Demo: Comparison to DocSearch.js](https://jquery.github.io/typesense-minibar/demo/compare--docsearch-3.html)
 
-  When it is time to delete an old result, we take a key from the "top" of the map, which is either the oldest and never used, or the least recently used.
+In minibar, entering "ajax" returns these 5 results:
 
-  If we only add new results and reuse results as-is ([FIFO strategy](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics))), that may delete very recently used data.
+<img align="right" width="300" src="./assets/eg-minibar132-ajax.png">
 
-* The styles for `typesense-minibar` as web component, and `.tsmb-form` class name are kept independent (that is, the web component does not auto-add the class name, nor does it otherwise rely on styles for the class name, and vice versa).
+> Low-Level Interface
+>
+> 1. jQuery.ajax()
+> 2. jQuery.ajaxTransport()
+>
+> Global Event Handlers
+>
+> 3. ajaxComplete event
+> 4. ajaxSuccess event
+> 5. ajaxError event
+
+In DocSearch, entering "ajax" returns these 10 results (the first 7 are visible without scrolling):
+
+<img align="right" width="300" src="./assets/eg-docsearch301-ajax.png">
+
+> Documentation
+>
+> 1. jQuery 3.0 Upgrade Guide
+> 2. jQuery 3.0 Upgrade Guide
+> 3. jQuery 3.0 Upgrade Guide
+> 4. jQuery 3.0 Upgrade Guide
+> 5. jQuery 3.0 Upgrade Guide
+>
+> Global Event Handlers
+>
+> 6. ajaxComplete event
+> 7. ajaxComplete event
+>
+> Global Event Handlers (contd., after scrolling)
+>
+> 8. ajaxSuccess event
+> 9. ajaxSuccess event
+> 10. ajaxError event
+
+### The `cache` Map
+
+This lets us instantly display any previous result in the same browser tab. We follow the [LRU strategy](https://en.wikipedia.org/wiki/Least_recently_used).
+
+For example, if you type `a`, `app`, `apple`, `apples`, and backspace to a shorter previous query, we instantly show those previous results. (No time wasted waiting for re-download of the same results. It also saves client bandwidth and server load.) Or, if you think another word might yield better results and replace it with `banana`, and return to `apple` because that had a better one, we respond instantly.
+
+We keep up to 100 past results in memory. After that, we prioritize keeping the most recently shown data, and delete older unused results. We assume that you're most likely to return to what you've seen most recently. (Maybe not within the last 10, but within 100. Even if you do return to the very first after a hundred, you're likely to pass by more recent ones on the way there. All queries have equal cost.) When we store a new result, or when we re-use an old result, we delete it and re-set it, so that it goes to the "bottom" of the map.
+
+When it is time to delete an old result, we take a key from the "top" of the map, which is either the oldest and never used, or the least recently used.
+
+If we only add new results and reuse results as-is ([FIFO strategy](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics))), that may delete very recently used data.
+
+### Separate CSS selectors for class and web component
+
+The styles for `typesense-minibar` as web component, and `.tsmb-form` class name are kept independent (that is, the web component does not auto-add the class name, nor does it otherwise rely on styles for the class name, and vice versa).
 
   This is done for two reasons:
 
-  1. Avoid selector conflict for Style API.
-     If we were to add `class="tsmb-form"` in the web component, it would mean `typesense-minibar form` and `.tsmb-form` both match. This makes the `typesense-minibar form` selector impsosible to override in CSS for downstream users, because our defaults for `.tsmb-form` (weight 0010) would continue to "win" the cascade, as being a stronger selector than `typesense-minibar form` (weight 0002).
-  2. Avoid a FOUC.
-     The element should render identically and without reflows both before and after JavaScript loads. During local development it's easy to miss a FOUC if it fixes itself once JavaScript loads. By not auto-correcting these, the bugs are more obvious and we fix them.
+1. Avoid selector conflict for Style API.
+   If we were to add `class="tsmb-form"` in the web component, it would mean `typesense-minibar form` and `.tsmb-form` both match. This makes the `typesense-minibar form` selector impsosible to override in CSS for downstream users, because our defaults for `.tsmb-form` (weight 0010) would continue to "win" the cascade, as being a stronger selector than `typesense-minibar form` (weight 0002).
+2. Avoid a FOUC.
+   The element should render identically and without reflows both before and after JavaScript loads. During local development it's easy to miss a FOUC if it fixes itself once JavaScript loads. By not auto-correcting these, the bugs are more obvious and we fix them.
 
 ## Internal API
 
