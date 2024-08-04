@@ -41,7 +41,6 @@ globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
     const query = state.query = input.value;
     if (!query) {
       state.hits = [];
-      state.cursor = -1;
       return close();
     }
     const hits = await search(query);
@@ -75,8 +74,9 @@ globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
   form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
   form.querySelector('.tsmb-icon-close').addEventListener('click', function () {
     input.value = '';
-    input.focus();
+    state.hits = [];
     close();
+    input.focus();
   });
   connect();
 
