@@ -92,7 +92,7 @@ typesense-minibar.demo-form-overlay:focus-within form {
 .demo-stylecontrol fieldset {
   background: #fff;
 }
-@media (min-height: 600px) {
+@media (min-height: 750px) {
   .demo-stylecontrol {
     position: sticky;
     bottom: 0;
