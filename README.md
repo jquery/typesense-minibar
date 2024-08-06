@@ -23,7 +23,7 @@
 
 ## Getting started
 
-**[Demo](https://jquery.github.io/typesense-minibar/demo/)**
+**[Demo](https://jquery.github.io/typesense-minibar/)**
 
 ```html
 <typesense-minibar data-origin="" data-collection="" data-key="">
