@@ -3,12 +3,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>minibar | Demo</title>
-<script defer type="module" src="../typesense-minibar.js"></script>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../typesense-minibar.css">
 <link rel="stylesheet" href="../typesense-minibar-foot.css">
 <link rel="stylesheet" href="demo.css">
 <link rel="stylesheet" href="demo-theme.css">
+<script defer type="module" src="../typesense-minibar.js"></script>
 <body>
   <header>
     <a href="../" class="demo-logo">Minibar</a>
@@ -19,42 +19,51 @@
         <input type="hidden" name="sites" value="qunitjs.com">
       </form>
     </typesense-minibar>
+    <span class="demo-caption">Themed (Web Component)</span>
   </header>
-  <header>
-    <span class="demo-logo"></span>
-    <!-- HTML class, with data-group=true, and right aligned. -->
-    <form role="search" class="tsmb-form demo-right-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
-      <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
-      <input type="hidden" name="sites" value="jquery.com">
-    </form>
-  </header>
-  <header>
-    <span class="demo-logo"></span>
-    <!-- Web Component class, with data-group=true, and right aligned. -->
-    <typesense-minibar class="demo-right-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true">
+  <header class="demo-head-right">
+    <a href="../" class="demo-logo"></a>
+    <span class="demo-caption">Themed (Web Component, group=true, right aligned)</span>
+    <typesense-minibar data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true">
       <form role="search" action="https://duckduckgo.com">
         <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
         <input type="hidden" name="sites" value="jquery.com">
       </form>
     </typesense-minibar>
   </header>
+  <header class="demo-head-right">
+    <a href="../" class="demo-logo"></a>
+    <span class="demo-caption">Themed (HTML class, group=true, right aligned)</span>
+    <form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
+      <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
+      <input type="hidden" name="sites" value="jquery.com">
+    </form>
+  </header>
   <main>
-    <h2>Web Component</h2>
-    <typesense-minibar data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true">
+    <h2>Web Component: Default</h2>
+    <typesense-minibar data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz">
       <form role="search" action="https://duckduckgo.com">
         <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
         <input type="hidden" name="sites" value="qunitjs.com">
       </form>
     </typesense-minibar>
 
-    <h2>HTML class</h2>
-    <form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" action="https://duckduckgo.com">
+    <h2>HTML class: Default</h2>
+    <form role="search" class="tsmb-form" data-origin="https://typesense.jquery.com" data-collection="qunitjs_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" action="https://duckduckgo.com">
       <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
       <input type="hidden" name="sites" value="qunitjs.com">
     </form>
 
-    <h2>Style API (customize --tsmb-size-* variables)</h2>
-    <form role="search" class="tsmb-form demo-custom-form" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
+    <h2>Style API (fullscreen overlay, group=true, Web Component)</h2>
+    <typesense-minibar data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" class="demo-form-overlay">
+      <form role="search" action="https://duckduckgo.com">
+        <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
+        <input type="hidden" name="sites" value="jquery.com">
+      </form>
+  </typesense-minibar>
+
+    <h2>Style API (customized --tsmb-size-* variables)</h2>
+    <form role="search" class="tsmb-form demo-form-size" data-origin="https://typesense.jquery.com" data-collection="jquery_com" data-key="Zh8mMgohXECel9wjPwqT7lekLSG3OCgz" data-foot="true" data-group="true" action="https://duckduckgo.com">
       <input type="search" name="q" aria-label="Search" placeholder="Search..." autocomplete="off">
       <input type="hidden" name="sites" value="jquery.com">
     </form>

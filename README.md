@@ -35,8 +35,8 @@
 ```
 
 ```html
-<script defer type="module" src="typesense-minibar.js"></script>
 <link rel="stylesheet" href="typesense-minibar.css">
+<script defer type="module" src="typesense-minibar.js"></script>
 ```
 
 Distribution:

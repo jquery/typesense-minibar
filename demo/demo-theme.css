@@ -4,7 +4,7 @@
 
 header {
   background: #390f39;
-  color: #fff;
+  color: #fbdbfb;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 
   display: flex;
@@ -19,6 +19,7 @@ header > * {
 
 .demo-logo {
   background-image: url(../assets/logo-text-dark.svg);
+  color: #fff;
 }
 
 header .tsmb-form,
@@ -27,7 +28,6 @@ header typesense-minibar {
   --tsmb-color-base30: var(--tsmb-color-primary90);
   --tsmb-color-base50: #c090c0;
   --tsmb-color-base90: #c090c0;
-  --tsmb-size-listbox-width: calc(min(50rem, 80vw));
 }
 header .tsmb-form,
 header typesense-minibar form {
