@@ -61,7 +61,10 @@ globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
     if (!e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
       if (e.code === 'ArrowDown') moveCursor(1);
       if (e.code === 'ArrowUp') moveCursor(-1);
-      if (e.code === 'Escape') close();
+      if (e.code === 'Escape') {
+        close();
+        input.blur();
+      }
       if (e.code === 'Enter') {
         const url = state.hits[state.cursor]?.url;
         if (url) location.href = url;
@@ -71,7 +74,7 @@ globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
   form.addEventListener('submit', function (e) {
     e.preventDefault();
   });
-  form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
+  form.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="20" height="20" aria-hidden="true" tabindex="-1" class="tsmb-icon-close" style="display: none;"><path d="M9 3L3 9M3 3L9 9"/></svg>');
   form.querySelector('.tsmb-icon-close').addEventListener('click', function () {
     input.value = '';
     state.hits = [];
