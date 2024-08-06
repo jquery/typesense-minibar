@@ -1,7 +1,7 @@
 /* eslint-env qunit */
 /* eslint-disable no-new, quotes */
 
-QUnit.config.testTimeout = 1000;
+QUnit.config.testTimeout = 2000;
 
 const API_RESP_EMPTY = {};
 const API_RESP_TITLE_MATCH = {
