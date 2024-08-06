@@ -24,6 +24,8 @@ typesense-minibar {
   --tsmb-color-primary30: #390f39;
   --tsmb-color-primary50: #9c3493;
   --tsmb-color-primary90: #fbdbfb;
+
+  max-width: 100%;
 }
 
 .tsmb-form,
