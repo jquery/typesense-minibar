@@ -75,7 +75,7 @@ typesense-minibar.demo-form-overlay:focus-within {
   position: fixed;
   inset: 0px;
   background: #f4f4f4;
-  padding: var(--tsmb-size-sm) 0;
+  padding: var(--tsmb-size-sm);
 }
 typesense-minibar.demo-form-overlay:focus-within form {
   width: 30rem;
