@@ -40,7 +40,6 @@ jobs:
           cp -R $GITHUB_WORKSPACE/{*.*,assets,coverage,demo,test} .
           # Modifications
           touch .nojekyll
-          cp gh-pages.html index.html
           # Push
           git config user.name "${GITHUB_ACTOR}" && \
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
