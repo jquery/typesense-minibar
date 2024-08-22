@@ -117,8 +117,8 @@ typesense-minibar form::before {
   cursor: pointer;
 }
 
-.tsmb-form--open .tsmb-icon-close {
-  display: block !important;
+form:not(.tsmb-form--open) .tsmb-icon-close {
+  display: none;
 }
 
 .tsmb-form--slash:not(.tsmb-form--open):not(:focus-within)::after {
