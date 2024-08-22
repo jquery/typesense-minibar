@@ -121,10 +121,6 @@ typesense-minibar form::before {
   display: block !important;
 }
 
-.tsmb-form--slash::after {
-  display: none;
-}
-
 .tsmb-form--slash:not(.tsmb-form--open):not(:focus-within)::after {
   content: '/';
   display: inline-block;
