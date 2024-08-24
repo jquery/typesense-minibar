@@ -1,4 +1,4 @@
-/*! https://github.com/jquery/typesense-minibar 1.3.3 */
+/*! https://github.com/jquery/typesense-minibar 1.3.4 */
 globalThis.tsminibar = function tsminibar (form, dataset = form.dataset) {
   const cache = new Map();
   const state = { query: '', cursor: -1, open: false, hits: [] };
