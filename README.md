@@ -20,6 +20,7 @@
 * **Fast**, leverages preconnect (Resource Hints), LRU memory cache
 * **Easy to install**, fully declarative via HTML (zero-code setup!)
 * **Web Component** ready
+* **CSP ready** compatible with strict [CSP security](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) settings
 
 ## Getting started
 
@@ -41,8 +42,8 @@
 
 Distribution:
 
-* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.3/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.3/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.3/typesense-minibar.css)
-* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.3/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.3/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.3/typesense-minibar.css)
+* **jsDelivr** ([browse](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.4/)):<br>[typesense-minibar.js](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.4/typesense-minibar.js), [typesense-minibar.css](https://cdn.jsdelivr.net/npm/typesense-minibar@1.3.4/typesense-minibar.css)
+* **UNPKG** ([browse](https://unpkg.com/browse/typesense-minibar@1.3.4/)):<br>[typesense-minibar.js](https://unpkg.com/typesense-minibar@1.3.4/typesense-minibar.js), [typesense-minibar.css](https://unpkg.com/typesense-minibar@1.3.4/typesense-minibar.css)
 * npm: [typesense-minibar](https://www.npmjs.com/package/typesense-minibar)
   ```shell
   npm i --save typesense-minibar
